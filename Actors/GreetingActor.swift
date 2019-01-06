@@ -101,7 +101,7 @@ class GreetingActorController : UIViewController {
     
     func rotateMouthToAngry() {
         UIView.animate(withDuration: 0.3, animations: {
-            self.mouth.transform = CGAffineTransformIdentity
+            self.mouth.transform = __CGAffineTransformMake(1, 0, 0, 1, 0, 0)
             }, completion: nil)
     }
     

@@ -46,13 +46,13 @@ public class WireTransferWorker : Actor {
             if let _ = self.transfer {} else {
                 self.transfer = transfer
                 self.bank = self.transfer!.sender
-                become("transfering", state:transfering)
+                become(name: "transfering", state:transfering)
                 transfer.origin ! Withdraw(sender: this, ammount: transfer.ammount, operationId: UUID())
             }
             break
             
         default:
-            super.receive(msg)
+            super.receive(msg: msg)
         }
     }
 }

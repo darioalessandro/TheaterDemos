@@ -75,7 +75,7 @@ public class BLEControllersActor : Actor, UITableViewDataSource, UITableViewDele
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let deviceViewCtrl = self.deviceViewCtrl {
             if tableView.isEqual(deviceViewCtrl.tableView) {
-                return deviceViewCtrl.tableView!.cellForRow(at: indexPath)!
+                return deviceViewCtrl.tableView(tableView:tableView, cellForRowAt: indexPath)
             }
         }
             
