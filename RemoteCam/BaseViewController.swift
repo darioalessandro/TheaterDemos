@@ -33,16 +33,16 @@ public class iAdViewController : UIViewController, ADBannerViewDelegate {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        if !InAppPurchasesManager.sharedManager().didUserBuyRemoveiAdsFeature() {
+        if !InAppPurchasesManager.shared().didUserBuyRemoveiAdsFeature() {
             self.setupiAdNetwork()
         } else {
             self.shouldHideBanner()
         }
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(iAdViewController.ShouldHideiAds(_:)), name: "ShouldHideiAds", object: nil)
+        NotificationCenter.defaultCenter.addObserver(self, selector: #selector(iAdViewController.ShouldHideiAds(_:)), name: "ShouldHideiAds", object: nil)
     }
     
     func layoutBanners() {
-        if iAdBanner.bannerLoaded {
+        if iAdBanner.isBannerLoaded {
             self.shouldShowBanner()
         }else{
             self.shouldHideBanner()
@@ -50,14 +50,14 @@ public class iAdViewController : UIViewController, ADBannerViewDelegate {
     }
     
     func shouldHideBanner() {
-        UIView.animateWithDuration(0.3) { () -> Void in
+        UIView.animate(withDuration: 0.3) { () -> Void in
             self.bottomBannerConstraint!.constant = 40
             self.view.layoutSubviews()
         }
     }
     
     func shouldShowBanner() {
-        UIView.animateWithDuration(0.3) { () -> Void in
+        UIView.animate(withDuration: 0.3) { () -> Void in
             let value = 40 - self.iAdBanner.frame.size.height
             self.bottomBannerConstraint!.constant = value
             self.view.layoutSubviews()
@@ -80,11 +80,11 @@ public class iAdViewController : UIViewController, ADBannerViewDelegate {
             return iAdConstraints!
         }
         
-        let leading = NSLayoutConstraint(item: iAdBanner, attribute: .Leading, relatedBy: .Equal, toItem: self.bannerView, attribute: .Leading, multiplier: 1, constant: 0)
+        let leading = NSLayoutConstraint(item: iAdBanner, attribute: .leading, relatedBy: .equal, toItem: self.bannerView, attribute: .leading, multiplier: 1, constant: 0)
     
-        let top = NSLayoutConstraint(item: iAdBanner, attribute: .Top, relatedBy: .Equal, toItem: self.bannerView, attribute: .Top, multiplier: 1, constant: 0)
+        let top = NSLayoutConstraint(item: iAdBanner, attribute: .top, relatedBy: .equal, toItem: self.bannerView, attribute: .top, multiplier: 1, constant: 0)
         
-        let width = NSLayoutConstraint(item: iAdBanner, attribute: .Width, relatedBy: .Equal, toItem: self.bannerView, attribute: .Width, multiplier: 1, constant: 0)
+        let width = NSLayoutConstraint(item: iAdBanner, attribute: .width, relatedBy: .equal, toItem: self.bannerView, attribute: .width, multiplier: 1, constant: 0)
         
         self.iAdConstraints = [top, width, leading]
         return self.iAdConstraints!
@@ -100,15 +100,15 @@ public class iAdViewController : UIViewController, ADBannerViewDelegate {
         self.layoutBanners()
     }
     
-    public func bannerView(banner: ADBannerView!, didFailToReceiveAdWithError error: NSError!) {
+    public func bannerView(_ banner: ADBannerView!, didFailToReceiveAdWithError error: Error?) {
         self.shouldHideBanner()
     }
     
-    public func bannerViewActionShouldBegin(banner: ADBannerView!, willLeaveApplication willLeave: Bool) -> Bool {
+    public func bannerViewActionShouldBegin(_ banner: ADBannerView!, willLeaveApplication willLeave: Bool) -> Bool {
         return true
     }
 
-    public func bannerViewActionDidFinish(banner: ADBannerView!) {
+    public func bannerViewActionDidFinish(_ banner: ADBannerView!) {
         self.shouldHideBanner()
     }
     

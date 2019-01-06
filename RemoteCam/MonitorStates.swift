@@ -17,13 +17,13 @@ extension RemoteCamSession {
         lobby : RolePickerController) -> Receive {
             let alert = UIAlertController(title: "Requesting flash toggle",
                 message: nil,
-                preferredStyle: .Alert)
+                preferredStyle: .alert)
             return {[unowned self] (msg : Actor.Message) in
                 switch(msg) {
                     
                 case is UICmd.ToggleFlash:
-                    ^{lobby.presentViewController(alert, animated: true, completion: {
-                        if let f = self.sendMessage([peer], msg: RemoteCmd.ToggleFlash()) as? Failure {
+                    ^{lobby.present(alert, animated: true, completion: {
+                        if let f = self.sendMessage(peer: [peer], msg: RemoteCmd.ToggleFlash()) as? Failure {
                             self.this ! RemoteCmd.ToggleFlashResp(flashMode: nil, error: f.error)
                         }
                     })}
@@ -32,33 +32,33 @@ extension RemoteCamSession {
                     monitor ! UICmd.ToggleFlashResp(flashMode: t.flashMode, error: t.error)
                     if let _ = t.flashMode {
                         monitor ! t
-                        ^{alert.dismissViewControllerAnimated(true, completion: nil)}
+                        ^{alert.dismiss(animated: true, completion: nil)}
                     }else if let error = t.error {
-                        ^{alert.dismissViewControllerAnimated(true, completion:{
-                            let a = UIAlertController(title: error.domain, message: nil, preferredStyle: .Alert)
+                        ^{alert.dismiss(animated: true, completion:{
+                            let a = UIAlertController(title: error._domain, message: nil, preferredStyle: .alert)
                             
-                            a.addAction(UIAlertAction(title: "Ok", style: .Cancel) { (action) in
-                                a.dismissViewControllerAnimated(true, completion: nil)
+                            a.addAction(UIAlertAction(title: "Ok", style: .cancel) { (action) in
+                                a.dismiss(animated: true, completion: nil)
                                 })
                             
-                            lobby.presentViewController(a, animated: true, completion: nil)
+                            lobby.present(a, animated: true, completion: nil)
                         })}
                     }
                     self.unbecome()
                     
                 case let c as DisconnectPeer:
                     if c.peer.displayName == peer.displayName {
-                        ^{alert.dismissViewControllerAnimated(true, completion: nil)}
+                        ^{alert.dismiss(animated: true, completion: nil)}
                         self.popAndStartScanning()
                     }
                     
                 case is Disconnect:
-                    ^{alert.dismissViewControllerAnimated(true, completion: nil)}
+                    ^{alert.dismiss(animated: true, completion: nil)}
                     self.popAndStartScanning()
                     
                 case is UICmd.UnbecomeMonitor:
-                    ^{alert.dismissViewControllerAnimated(true, completion: nil)}
-                    self.popToState(self.states.connected)
+                    ^{alert.dismiss(animated: true, completion: nil)}
+                    self.popToState(name: self.states.connected)
                     
                 default:
                     print("sdfsdf")
@@ -71,14 +71,14 @@ extension RemoteCamSession {
         lobby : RolePickerController) -> Receive {
             let alert = UIAlertController(title: "Requesting camera toggle",
                 message: nil,
-                preferredStyle: .Alert)
+                preferredStyle: .alert)
             
             return {[unowned self] (msg : Actor.Message) in
                 switch(msg) {
                     
                 case is UICmd.ToggleCamera:
-                    ^{lobby.presentViewController(alert, animated: true, completion: {
-                        if let f =  self.sendMessage([peer], msg: RemoteCmd.ToggleCamera()) as? Failure {
+                    ^{lobby.present(alert, animated: true, completion: {
+                        if let f =  self.sendMessage(peer: [peer], msg: RemoteCmd.ToggleCamera()) as? Failure {
                             self.this ! RemoteCmd.ToggleCameraResp(flashMode: nil, camPosition: nil, error: f.error)
                         }
                     })}
@@ -86,33 +86,33 @@ extension RemoteCamSession {
                 case let t as RemoteCmd.ToggleCameraResp:
                     monitor ! UICmd.ToggleCameraResp(flashMode: t.flashMode, camPosition: t.camPosition, error: t.error)
                     if let _ = t.flashMode {
-                        ^{alert.dismissViewControllerAnimated(true, completion: nil)}
+                        ^{alert.dismiss(animated: true, completion: nil)}
                     }else if let error = t.error {
-                        ^{alert.dismissViewControllerAnimated(true, completion:{
-                            let a = UIAlertController(title: error.domain, message: nil, preferredStyle: .Alert)
+                        ^{alert.dismiss(animated: true, completion:{
+                            let a = UIAlertController(title: error._domain, message: nil, preferredStyle: .alert)
                             
-                            a.addAction(UIAlertAction(title: "Ok", style: .Cancel) { (action) in
-                                a.dismissViewControllerAnimated(true, completion: nil)
+                            a.addAction(UIAlertAction(title: "Ok", style: .cancel) { (action) in
+                                a.dismiss(animated: true, completion: nil)
                                 })
                             
-                            lobby.presentViewController(a, animated: true, completion: nil)
+                            lobby.present(a, animated: true, completion: nil)
                         })}
                     }
                     self.unbecome()
                     
                 case let c as DisconnectPeer:
                     if c.peer.displayName == peer.displayName {
-                        ^{alert.dismissViewControllerAnimated(true, completion: nil)}
+                        ^{alert.dismiss(animated: true, completion: nil)}
                         self.popAndStartScanning()
                     }
                     
                 case is Disconnect:
-                    ^{alert.dismissViewControllerAnimated(true, completion: nil)}
+                    ^{alert.dismiss(animated: true, completion: nil)}
                     self.popAndStartScanning()
                     
                 case is UICmd.UnbecomeMonitor:
-                    ^{alert.dismissViewControllerAnimated(true, completion: nil)}
-                    self.popToState(self.states.connected)
+                    ^{alert.dismiss(animated: true, completion: nil)}
+                    self.popToState(name: self.states.connected)
                     
                 default:
                     print("sdfsdf")
@@ -125,52 +125,52 @@ extension RemoteCamSession {
         lobby : RolePickerController) -> Receive {
             let alert = UIAlertController(title: "Requesting picture",
                 message: nil,
-                preferredStyle: .Alert)
+                preferredStyle: .alert)
             return {[unowned self] (msg : Actor.Message) in
                 switch(msg) {
                     
                 case is RemoteCmd.TakePicAck:
                     ^{alert.title = "Receiving picture"}
-                    self.sendMessage([peer], msg: msg)
+                    self.sendMessage(peer: [peer], msg: msg)
                     
                 case is UICmd.TakePicture:
-                    ^{lobby.presentViewController(alert, animated: true, completion: {
-                        self.sendMessage([peer], msg: RemoteCmd.TakePic(sender: self.this))
+                    ^{lobby.present(alert, animated: true, completion: {
+                        self.sendMessage(peer: [peer], msg: RemoteCmd.TakePic(sender: self.this))
                     })}
                     
                 case let picResp as RemoteCmd.TakePicResp:
-                    if let imageData = picResp.pic, image = UIImage(data: imageData) {
+                    if let imageData = picResp.pic, let image = UIImage(data: imageData) {
                         UIImageWriteToSavedPhotosAlbum(image, self, Selector("image:didFinishSavingWithError:contextInfo:"), nil)
-                        ^{alert.dismissViewControllerAnimated(true, completion: nil)}
+                        ^{alert.dismiss(animated: true, completion: nil)}
                     }else if let error = picResp.error {
-                        ^{alert.dismissViewControllerAnimated(true, completion:{ () in
-                            let a = UIAlertController(title: error.domain, message: nil, preferredStyle: .Alert)
+                        ^{alert.dismiss(animated: true, completion:{ () in
+                            let a = UIAlertController(title: error._domain, message: nil, preferredStyle: .alert)
                             
-                            a.addAction(UIAlertAction(title: "Ok", style: .Cancel) { (action) in
-                                a.dismissViewControllerAnimated(true, completion: nil)
+                            a.addAction(UIAlertAction(title: "Ok", style: .cancel) { (action) in
+                                a.dismiss(animated: true, completion: nil)
                                 })
                             
-                            lobby.presentViewController(a, animated: true, completion: nil)
+                            lobby.present(a, animated: true, completion: nil)
                         })}
                     }
                     self.unbecome()
                     
                 case is UICmd.UnbecomeMonitor:
-                    ^{alert.dismissViewControllerAnimated(true, completion: nil)}
-                    self.popToState(self.states.connected)
+                    ^{alert.dismiss(animated: true, completion: nil)}
+                    self.popToState(name: self.states.connected)
                     
                 case let c as DisconnectPeer:
                     if c.peer.displayName == peer.displayName {
-                        ^{alert.dismissViewControllerAnimated(true, completion: nil)}
+                        ^{alert.dismiss(animated: true, completion: nil)}
                         self.popAndStartScanning()
                     }
                     
                 case is Disconnect:
-                    ^{alert.dismissViewControllerAnimated(true, completion: nil)}
+                    ^{alert.dismiss(animated: true, completion: nil)}
                     self.popAndStartScanning()
                     
                 default:
-                    ^{alert.dismissViewControllerAnimated(true, completion: nil)}
+                    ^{alert.dismiss(animated: true, completion: nil)}
                     print("sdfsdf")
                 }
             }
@@ -185,7 +185,7 @@ extension RemoteCamSession {
                     monitor ! msg
                     
                 case is UICmd.UnbecomeMonitor:
-                    self.popToState(self.states.connected)
+                    self.popToState(name: self.states.connected)
                     
                 case let c as DisconnectPeer:
                     if c.peer.displayName == peer.displayName {
@@ -193,25 +193,25 @@ extension RemoteCamSession {
                     }
                     
                 case is UICmd.ToggleCamera:
-                    self.become(self.states.monitorTakingPicture, state:
-                        self.monitorTogglingCamera(monitor, peer: peer, lobby: lobby))
+                    self.become(name: self.states.monitorTakingPicture, state:
+                        self.monitorTogglingCamera(monitor: monitor, peer: peer, lobby: lobby))
                     self.this ! msg
                     
                 case is UICmd.ToggleFlash:
-                    self.become(self.states.monitorTogglingFlash, state:
-                        self.monitorTogglingFlash(monitor, peer: peer, lobby: lobby))
+                    self.become(name: self.states.monitorTogglingFlash, state:
+                        self.monitorTogglingFlash(monitor: monitor, peer: peer, lobby: lobby))
                     self.this ! msg
                     
                 case is UICmd.TakePicture:
-                    self.become(self.states.monitorTakingPicture, state:
-                        self.monitorTakingPicture(monitor, peer: peer, lobby: lobby))
+                    self.become(name: self.states.monitorTakingPicture, state:
+                        self.monitorTakingPicture(monitor: monitor, peer: peer, lobby: lobby))
                     self.this ! msg
                     
                 case is Disconnect:
                     self.popAndStartScanning()
                     
                 default:
-                    self.receive(msg)
+                    self.receive(msg: msg)
                 }
             }
     }

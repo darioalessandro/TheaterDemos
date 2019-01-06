@@ -18,7 +18,7 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
     
     let service : String = "RemoteCam"
     
-    let peerID = MCPeerID(displayName: UIDevice.currentDevice().name)
+    let peerID = MCPeerID(displayName: UIDevice.current.name)
     
     var mcAdvertiserAssistant : MCAdvertiserAssistant!
     
@@ -43,12 +43,12 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
             switch(msg) {
                 
                 case let m as UICmd.BecomeCamera:
-                    self.become(self.states.camera, state: self.camera(peer, ctrl: m.ctrl, lobby: lobby))
-                    self.sendMessage([peer], msg : RemoteCmd.PeerBecameCamera())
+                    self.become(name: self.states.camera, state: self.camera(peer: peer, ctrl: m.ctrl, lobby: lobby))
+                    self.sendMessage(peer: [peer], msg : RemoteCmd.PeerBecameCamera())
 
                 case let m as UICmd.BecomeMonitor:
-                    self.become(self.states.monitor, state:self.monitor(m.sender!, peer: peer, lobby: lobby))
-                    self.sendMessage([peer], msg : RemoteCmd.PeerBecameMonitor())
+                    self.become(name: self.states.monitor, state:self.monitor(monitor: m.sender!, peer: peer, lobby: lobby))
+                    self.sendMessage(peer: [peer], msg : RemoteCmd.PeerBecameMonitor())
                 
                 case is RemoteCmd.PeerBecameCamera:
                     ^{lobby.becomeMonitor()}
@@ -68,13 +68,13 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
                         self.popAndStartScanning()
 
                 default:
-                    self.receive(msg)
+                    self.receive(msg: msg)
             }
         }
     }
     
     func popAndStartScanning() {
-        self.popToState(self.states.scanning)
+        self.popToState(name: self.states.scanning)
         self.this ! BLECentral.StartScanning(services: nil, sender: this)
     }
     
@@ -83,16 +83,16 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
             switch(msg) {
                 
             case is BLECentral.StartScanning:
-                self.startScanning(lobby)
+                self.startScanning(lobby: lobby)
                 ^{lobby.navigationItem.rightBarButtonItem?.title = lobby.states.connect}
                 
             case let w as OnConnectToDevice:
                 if let c = self.browser {
-                    c.dismissViewControllerAnimated(true, completion: {[unowned self] in
+                    c.dismiss(animated: true, completion: {[unowned self] in
                         self.browser = nil
                     })
                 }
-                self.become(self.states.connected, state: self.connected(lobby, peer: w.peer))
+                self.become(name: self.states.connected, state: self.connected(lobby: lobby, peer: w.peer))
                 self.mcAdvertiserAssistant.stop()
                 
             case is Disconnect:
@@ -101,10 +101,10 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
             case is UICmd.BecomeCamera,
              is UICmd.BecomeMonitor,
              is UICmd.ToggleConnect:
-                self.startScanning(lobby)
+                self.startScanning(lobby: lobby)
                 
             default:
-                self.receive(msg)
+                self.receive(msg: msg)
             }
         }
     }
@@ -113,11 +113,11 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
         return {[unowned self](msg : Message) in
             switch(msg) {
             case is UICmd.StartScanning:
-                self.become(self.states.scanning, state:self.scanning(ctrl))
+                self.become(name: self.states.scanning, state:self.scanning(lobby: ctrl))
                 self.this ! BLECentral.StartScanning(services: nil, sender: self.this)
                 
             default:
-                self.receive(msg)
+                self.receive(msg: msg)
             }
         }
     }
@@ -135,45 +135,45 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
                 browser.delegate = self;
                 browser.minimumNumberOfPeers = 2
                 browser.maximumNumberOfPeers = 2
-                browser.modalPresentationStyle = UIModalPresentationStyle.FormSheet
+                browser.modalPresentationStyle = UIModalPresentationStyle.formSheet
                 self.mcAdvertiserAssistant = MCAdvertiserAssistant(serviceType: self.service, discoveryInfo: nil, session: self.session)
                 self.mcAdvertiserAssistant.start()
-                lobby.presentViewController(browser, animated: true, completion: nil)
+                lobby.present(browser, animated: true, completion: nil)
             }
         }
     }
     
     public func unableToProcessError(msg : Message) -> NSError {
-        return NSError(domain: "Unable to process \(msg.dynamicType) command, since \(UIDevice.currentDevice().name) is not in the camera screen.", code: 0, userInfo: nil)
+        return NSError(domain: "Unable to process \(type(of: msg)) command, since \(UIDevice.current.name) is not in the camera screen.", code: 0, userInfo: nil)
     }
     
     override public func receive(msg: Actor.Message) {
         switch (msg) {
             
             case let m as UICmd.BecomeCamera:
-                ^{m.ctrl.navigationController?.popViewControllerAnimated(true)}
+                ^{m.ctrl.navigationController?.popViewController(animated: true)}
             
             case let m as UICmd.BecomeMonitor:
                 m.sender! ! UICmd.BecomeMonitorFailed(sender : this)
             
             case is RemoteCmd.TakePic:
-                let l = RemoteCmd.TakePicResp(sender: this, error: self.unableToProcessError(msg))
-                self.sendMessage(self.session.connectedPeers, msg: l)
+                let l = RemoteCmd.TakePicResp(sender: this, error: self.unableToProcessError(msg: msg))
+                self.sendMessage(peer: self.session.connectedPeers, msg: l)
             
             case is RemoteCmd.ToggleCamera:
-                let l = RemoteCmd.ToggleCameraResp(flashMode: nil, camPosition: nil, error: self.unableToProcessError(msg))
-                self.sendMessage(self.session.connectedPeers, msg: l)
+                let l = RemoteCmd.ToggleCameraResp(flashMode: nil, camPosition: nil, error: self.unableToProcessError(msg: msg))
+                self.sendMessage(peer: self.session.connectedPeers, msg: l)
             
             case is RemoteCmd.ToggleFlash:
-                let l = RemoteCmd.ToggleFlashResp(flashMode: nil, error: self.unableToProcessError(msg))
-                self.sendMessage(self.session.connectedPeers, msg: l)
+                let l = RemoteCmd.ToggleFlashResp(flashMode: nil, error: self.unableToProcessError(msg: msg))
+                self.sendMessage(peer: self.session.connectedPeers, msg: l)
             
             default:
-                super.receive(msg)
+                super.receive(msg: msg)
         }
     }
     
-    @objc func image(image: UIImage, didFinishSavingWithError error: NSErrorPointer, contextInfo:UnsafePointer<Void>) {
+    @objc func image(image: UIImage, didFinishSavingWithError error: ErrorPointer, contextInfo:UnsafePointer<Void>) {
         if error != nil {
             if let e = error.memory {
                 this ! UICmd.FailedToSaveImage(sender: nil, error: e)
@@ -181,11 +181,11 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
         }
     }
     
-    public func sendMessage(peer : [MCPeerID], msg : Actor.Message, mode : MCSessionSendDataMode = .Reliable) -> Try<Message> {
+    public func sendMessage(peer : [MCPeerID], msg : Actor.Message, mode : MCSessionSendDataMode = .reliable) -> Try<Message> {
         do {
-            try self.session.sendData(NSKeyedArchiver.archivedDataWithRootObject(msg),
-            toPeers: peer,
-            withMode:mode)
+            try self.session.send(NSKeyedArchiver.archivedData(withRootObject: msg),
+                                  toPeers: peer,
+                                  with:mode)
             return Success(value: msg)
         } catch let error as NSError {
             print("error \(error)")
@@ -193,34 +193,34 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
         }
     }
     
-    public func browserViewControllerDidFinish(browserViewController: MCBrowserViewController) {
-        browserViewController.dismissViewControllerAnimated(true) { () in }
+    public func browserViewControllerDidFinish(_ browserViewController: MCBrowserViewController) {
+        browserViewController.dismiss(animated: true) { () in }
     }
     
-    public func browserViewControllerWasCancelled(browserViewController: MCBrowserViewController) {
+    public func browserViewControllerWasCancelled(_ browserViewController: MCBrowserViewController) {
         //TODO: add dialog to force the person to connect with a phone
-        browserViewController.dismissViewControllerAnimated(true) { () in }
+        browserViewController.dismiss(animated: true) { () in }
     }
     
-    public func session(session: MCSession, peer peerID: MCPeerID, didChangeState state: MCSessionState) {
+    public func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
-        case MCSessionState.Connected:
+        case MCSessionState.connected:
             self.this ! OnConnectToDevice(peer : peerID, sender : this)
             print("Connected: \(peerID.displayName)")
             
-        case MCSessionState.Connecting:
+        case MCSessionState.connecting:
             print("Connecting: \(peerID.displayName)")
             
-        case MCSessionState.NotConnected:
+        case MCSessionState.notConnected:
             self.this ! DisconnectPeer(peer : peerID, sender : this)
             print("Not Connected: \(peerID.displayName)")
         }
     
     }
     
-    public func session(session: MCSession, didReceiveData data: NSData, fromPeer peerID: MCPeerID) {
+    public func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         
-        switch (NSKeyedUnarchiver.unarchiveObjectWithData(data)) {
+        switch (NSKeyedUnarchiver.unarchiveObject(with: data)) {
             case let frame as RemoteCmd.SendFrame:
                 this ! RemoteCmd.OnFrame(data: frame.data, sender: nil, peerId: peerID, fps: frame.fps, camPosition:  frame.camPosition)
             
@@ -233,15 +233,15 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
         
     }
     
-    public func session(session: MCSession, didReceiveStream stream: NSInputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
+    public func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
         
     }
     
-    public func session(session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, withProgress progress: NSProgress) {
+    public func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
         
     }
     
-    public func session(session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, atURL localURL: NSURL, withError error: NSError?) {
+    public func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
         
     }
     
