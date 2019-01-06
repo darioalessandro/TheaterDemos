@@ -46,7 +46,7 @@ public class MonitorActor : ViewCtrlActor<MonitorViewController> {
                     switch(img.imageOrientation) {
                     case .left, .right:
                         let multiplier = (f.camPosition == .back) ? Double(-1) : Double(1)
-                        t = CGAffineTransform(rotationAngle: CGFloat(multiplier * M_PI_2))
+                        t = CGAffineTransform(rotationAngle: CGFloat(multiplier * Double.pi))
                     case .up:
                             t = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
                         default:
@@ -199,7 +199,7 @@ public class MonitorViewController : iAdViewController {
     private func configureTimerUI() {
         self.sliderContainer.layer.cornerRadius = 30.0
         self.sliderContainer.clipsToBounds=true
-        self.timerSlider.layer.anchorPoint = CGPointMake(1, 1)
+        self.timerSlider.layer.anchorPoint = CGPoint.init(x: 1.0, y: 1.0)
         self.timerSlider.transform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi))
         self.timerSlider.minimumTrackTintColor = sliderColor1
         self.timerSlider.maximumTrackTintColor = sliderColor2

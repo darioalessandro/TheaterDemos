@@ -13,7 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    private func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         InAppPurchasesManager.shared().reloadProducts { (i, e) in }
         application.statusBarStyle = .lightContent
         self.setCustomNavBarTheme()
@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setCustomNavBarTheme() {
         let shadow = NSShadow()
         shadow.shadowColor = UIColor.black
-        shadow.shadowOffset = CGSizeMake(0.0, 1.0)
+        shadow.shadowOffset = CGSize.init(width: 0.0, height: 1.0)
         
         let app = UINavigationBar.appearance()
 

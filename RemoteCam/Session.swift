@@ -173,10 +173,10 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
         }
     }
     
-    @objc func image(image: UIImage, didFinishSavingWithError error: ErrorPointer, contextInfo:UnsafePointer<Void>) {
-        if error != nil {
-            if let e = error.memory {
-                this ! UICmd.FailedToSaveImage(sender: nil, error: e)
+    @objc func image(image: UIImage, didFinishSavingWithError error: ErrorPointer, contextInfo:UnsafeRawPointer) {
+        if let errorInstance = error,
+           let nsError = errorInstance.pointee {
+                this ! UICmd.FailedToSaveImage(sender: nil, error: nsError)
             }
         }
     }
@@ -245,7 +245,7 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
         
     }
     
-    public func session(session: MCSession, didReceiveCertificate certificate: [AnyObject]?, fromPeer peerID: MCPeerID, certificateHandler: (Bool) -> Void) {
+    @nonobjc public func session(session: MCSession, didReceiveCertificate certificate: [AnyObject]?, fromPeer peerID: MCPeerID, certificateHandler: @escaping (Bool) -> Void) {
             certificateHandler(true)
     }
 }

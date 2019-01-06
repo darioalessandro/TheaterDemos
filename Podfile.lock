@@ -34,7 +34,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/darioalessandro/BlackFireGallery.git
     :tag: 0.1.2
   Theater:
-    :commit: 49920a8d76442a9a82b87daf3f5f35f1d6cba3e1
+    :commit: 966100cf12a31c08323ab0a4b7d40f2a4e33bb30
     :git: "git@github.com:darioalessandro/Theater.git"
 
 SPEC CHECKSUMS:
