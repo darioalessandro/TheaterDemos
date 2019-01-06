@@ -1,0 +1,49 @@
+PODS:
+  - BFGallery (0.1.2):
+    - BFGallery/json (= 0.1.2)
+  - BFGallery/json (0.1.2)
+  - Nimble (7.3.1)
+  - Quick (1.3.2)
+  - Starscream (3.0.6)
+  - Theater (0.9):
+    - Starscream (~> 3.0.6)
+
+DEPENDENCIES:
+  - BFGallery (from `https://github.com/darioalessandro/BlackFireGallery.git`, tag `0.1.2`)
+  - Nimble (= 7.3.1)
+  - Quick (~> 1.3.2)
+  - Starscream (~> 3.0.6)
+  - "Theater (from `git@github.com:darioalessandro/Theater.git`, branch `fix-visibility`)"
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Nimble
+    - Quick
+    - Starscream
+
+EXTERNAL SOURCES:
+  BFGallery:
+    :git: https://github.com/darioalessandro/BlackFireGallery.git
+    :tag: 0.1.2
+  Theater:
+    :branch: fix-visibility
+    :git: "git@github.com:darioalessandro/Theater.git"
+
+CHECKOUT OPTIONS:
+  BFGallery:
+    :git: https://github.com/darioalessandro/BlackFireGallery.git
+    :tag: 0.1.2
+  Theater:
+    :commit: 49920a8d76442a9a82b87daf3f5f35f1d6cba3e1
+    :git: "git@github.com:darioalessandro/Theater.git"
+
+SPEC CHECKSUMS:
+  BFGallery: 5e89ca150a6b966b38b206b3a4e54d7fa358baf0
+  Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
+  Quick: 2623cb30d7a7f41ca62f684f679586558f483d46
+  Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
+  Theater: 7e2a6b3edcb88ce0f302424cf5b9e035519143b0
+
+PODFILE CHECKSUM: ce57b7d65c2879be09f4b6286415e10dd1eeabe3
+
+COCOAPODS: 1.5.3
