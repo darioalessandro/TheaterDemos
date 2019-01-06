@@ -13,25 +13,25 @@ def gallery
 end
 
 def testing_pods
-    pod 'Quick', '~> 0.9.3'
-    pod 'Nimble', '4.1.0'
+    pod 'Quick', '~> 1.3.2'
+    pod 'Nimble', '7.3.1'
 end
 
 target 'ActorsDemo' do
-    pod 'Starscream', '~> 1.1.3'
-    pod 'Theater', '0.6'
+    pod 'Starscream', '~> 3.0.6'
+    pod 'Theater', :git => 'git@github.com:darioalessandro/Theater.git', :branch => "fix-visibility"
     gallery
 end
 
 target 'RemoteCam' do
     gallery    
-    pod 'Starscream', '~> 1.1.3'
-    pod 'Theater', '0.6'
+    pod 'Starscream', '~> 3.0.6'
+    pod 'Theater', :git => 'git@github.com:darioalessandro/Theater.git', :branch => "fix-visibility"
 end
 
 target 'ActorsTests' do
-    pod 'Starscream', '~> 1.1.3'
-    pod 'Theater', '0.6'
+    pod 'Starscream', '~> 3.0.6'
+    pod 'Theater', :git => 'git@github.com:darioalessandro/Theater.git', :branch => "fix-visibility"
     testing_pods
     gallery    
 end

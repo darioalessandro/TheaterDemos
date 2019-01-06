@@ -21,14 +21,14 @@ public class PeripheralViewController : UITableViewController {
     
     lazy var system : ActorSystem = ActorSystem(name:"PeripheralSystem")
     
-    lazy var peripheral : ActorRef = self.system.actorOf(PeripheralActor.self, name: "PeripheralActor")
+    lazy var peripheral : ActorRef = self.system.actorOf(clz: PeripheralActor.self, name: "PeripheralActor")
     
-    public override func viewWillAppear(animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         peripheral ! SetViewCtrl(ctrl : self)
     }
     
-    public override func viewWillDisappear(animated: Bool) {
-        if(self.isBeingDismissed() || self.isMovingFromParentViewController()){
+    public override func viewWillDisappear(_ animated: Bool) {
+        if(self.isBeingDismissed || self.isMovingFromParentViewController){
             self.system.stop()
         }
     }

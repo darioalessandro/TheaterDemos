@@ -14,14 +14,14 @@ class DeviceListController: UITableViewController {
     
     lazy var system : ActorSystem = ActorSystem(name:"PeripheralSystem")
     
-    let reactive : ActorRef = RemoteCamSystem.shared.actorOf(BLEControllersActor.self, name: "BLEControllersActor")
+    let reactive : ActorRef = RemoteCamSystem.shared.actorOf(clz: BLEControllersActor.self, name: "BLEControllersActor")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         reactive ! SetDeviceListController(ctrl: self)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reactive ! BLECentral.StartScanning(services: [BLEData().svc], sender: nil)
     }
@@ -34,20 +34,20 @@ class DeviceListController: UITableViewController {
 
 class ObservationsViewController : UITableViewController {
     
-    let reactive : Optional<ActorRef> = RemoteCamSystem.shared.selectActor("RemoteCam/user/BLEControllersActor")
+    let reactive : Optional<ActorRef> = RemoteCamSystem.shared.selectActor(actorPath: "RemoteCam/user/BLEControllersActor")
     
     internal override func viewDidLoad() {
         super.viewDidLoad()
         reactive! ! SetObservationsController(ctrl: self)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reactive! ! BLECentral.StartScanning(services: [BLEData().svc], sender: nil)
     }
     
-    internal override func viewWillDisappear(animated: Bool) {
-        if(self.isBeingDismissed() || self.isMovingFromParentViewController()){
+    internal override func viewWillDisappear(_ animated: Bool) {
+        if(self.isBeingDismissed || self.isMovingFromParentViewController){
             reactive! ! RemoveObservationController()
         }
     }
@@ -61,15 +61,15 @@ class DeviceViewController : UITableViewController {
     }
     
     @IBOutlet weak var stateRow: UITableViewCell!
-    let reactive : Optional<ActorRef> = RemoteCamSystem.shared.selectActor("RemoteCam/user/BLEControllersActor")
+    let reactive : Optional<ActorRef> = RemoteCamSystem.shared.selectActor(actorPath: "RemoteCam/user/BLEControllersActor")
     
     internal override func viewDidLoad() {
         super.viewDidLoad()
         reactive! ! SetDeviceViewController(ctrl: self)
     }
     
-    internal override func viewWillDisappear(animated: Bool) {
-        if(self.isBeingDismissed() || self.isMovingFromParentViewController()){
+    internal override func viewWillDisappear(_ animated: Bool) {
+        if(self.isBeingDismissed || self.isMovingFromParentViewController){
             reactive! ! RemoveDeviceViewController(ctrl : self)
         }
     }

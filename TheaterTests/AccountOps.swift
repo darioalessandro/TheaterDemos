@@ -13,7 +13,7 @@ public class SetAccountNumber: Actor.Message {
     
     public let accountNumber : String
     
-    public init(accountNumber : String, operationId : NSUUID) {
+    public init(accountNumber : String, operationId : UUID) {
         self.accountNumber = accountNumber
         super.init(sender: nil)
     }
@@ -24,7 +24,7 @@ public class BankOp: Actor.MessageWithOperationId {
     
     public let ammount : Double
     
-    public init(sender: Optional<ActorRef>, ammount : Double, operationId : NSUUID) {
+    public init(sender: Optional<ActorRef>, ammount : Double, operationId : UUID) {
         self.ammount = ammount
         super.init(sender: sender, operationId : operationId)
     }
@@ -35,7 +35,7 @@ public class Withdraw: BankOp {}
 public class Deposit: BankOp {}
 
 public class PrintBalance: Actor.MessageWithOperationId {
-    public init(operationId : NSUUID) {
+    public init(operationId : UUID) {
         super.init(sender: nil, operationId : operationId)
     }
 }
@@ -44,9 +44,9 @@ public class BankOpResult : Actor.Message {
     
     public let result : Try<Double>
     
-    public let operationId : NSUUID
+    public let operationId : UUID
     
-    public init(sender : ActorRef, operationId : NSUUID, result : Try<Double>) {
+    public init(sender : ActorRef, operationId : UUID, result : Try<Double>) {
         self.operationId = operationId
         self.result = result
         super.init(sender: sender)
@@ -72,7 +72,7 @@ public class Transfer : BankOp {
         sender : ActorRef, ammount : Double) {
             self.origin = origin
             self.destination = destination
-            super.init(sender: sender, ammount: ammount, operationId: NSUUID())
+            super.init(sender: sender, ammount: ammount, operationId: UUID())
     }
 }
 

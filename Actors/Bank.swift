@@ -45,14 +45,14 @@ public class Bank : ViewCtrlActor<AccountsViewController> {
             self.accountBLabel = ctrl.accountBBalance
         }
         
-        accountA ! SetAccountNumber(accountNumber: "AccountA", operationId: NSUUID())
-        accountB ! SetAccountNumber(accountNumber: "AccountB", operationId: NSUUID())
+        accountA ! SetAccountNumber(accountNumber: "AccountA", operationId: UUID())
+        accountB ! SetAccountNumber(accountNumber: "AccountB", operationId: UUID())
         
         print("accountA \(accountA.path.asString)")
         print("accountB \(accountB.path.asString)")
         
-        accountA ! Deposit(sender: this, ammount: 10, operationId: NSUUID())
-        accountB ! Deposit(sender: this, ammount: 10, operationId: NSUUID())
+        accountA ! Deposit(sender: this, ammount: 10, operationId: UUID())
+        accountB ! Deposit(sender: this, ammount: 10, operationId: UUID())
         
         
         return {[unowned self](msg : Actor.Message) in

@@ -43,18 +43,18 @@ public class Account : Actor {
                 break
             
             case let w as Withdraw:
-                let op = self.withdraw(w.ammount)
+                let op = self.withdraw(amount: w.ammount)
                 if let sender = self.sender {
-                    self.scheduleOnce(delay(),block: { () in
+                    self.scheduleOnce(seconds: delay(),block: { () in
                         sender ! WithdrawResult(sender: self.this, operationId: w.operationId, result: op)
                     })
                 }
                 break
             
             case let w as Deposit:
-                let r = self.deposit(w.ammount)
+                let r = self.deposit(amount: w.ammount)
                 if let sender = self.sender {
-                    self.scheduleOnce(delay(),block: { () in
+                    self.scheduleOnce(seconds: delay(),block: { () in
                         sender ! DepositResult(sender: self.this, operationId: w.operationId, result: r)
                     })
                 }
@@ -66,12 +66,12 @@ public class Account : Actor {
             
             case let w as WithdrawResult:
                 if let ammount = w.result.toOptional() {
-                    self.deposit(ammount)
+                    self.deposit(amount: ammount)
                 }
                 break
             
             case let w as BankOpResult:
-                print("Account \(number) : \(w.operationId.UUIDString) \(w.result.description)")
+                print("Account \(number) : \(w.operationId.uuidString) \(w.result.description)")
                 break
             
             default:

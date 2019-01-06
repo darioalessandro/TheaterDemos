@@ -23,8 +23,8 @@ extension UIViewController {
     }
     
     public func verifyCameraAccess() {
-        if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) != .Authorized {
-            AVCaptureDevice.requestAccessForMediaType( AVMediaTypeVideo) {
+        if AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) != .authorized {
+            AVCaptureDevice.requestAccess( forMediaType: AVMediaTypeVideo) {
                 if !$0 {
                     ^{self.showNoAccessToCamera()}
                 }
@@ -33,9 +33,9 @@ extension UIViewController {
     }
     
     public func verifyCameraRollAccess() {
-        if PHPhotoLibrary.authorizationStatus() != .Authorized {
+        if PHPhotoLibrary.authorizationStatus() != .authorized {
             PHPhotoLibrary.requestAuthorization {
-                if $0 != .Authorized {
+                if $0 != .authorized {
                     ^{self.showNoCameraRollAccess()}
                 }
             }
@@ -44,13 +44,13 @@ extension UIViewController {
     
     public func showNoAccessToCamera() {
         let fileName = "BFDeniedAccessToCameraView"
-        let blocker = NSBundle.mainBundle().loadNibNamed(fileName, owner: nil, options: nil)[0] as! UIView
-        self.addErrorView(blocker)
+        let blocker = Bundle.main.loadNibNamed(fileName, owner: nil, options: nil)![0] as! UIView
+        self.addErrorView(view: blocker)
     }
     
     public func addErrorView(view : UIView) {
-            if let delegate = UIApplication.sharedApplication().delegate,
-            window = delegate.window {
+        if let delegate = UIApplication.shared.delegate,
+            let window = delegate.window {
                 window!.addSubview(view)
                 view.frame = (window?.bounds)!
             }
@@ -58,8 +58,8 @@ extension UIViewController {
     
     public func showNoCameraRollAccess() {
         let fileName = "BFDeniedAccessToAssetsView"
-        let blocker = NSBundle.mainBundle().loadNibNamed(fileName, owner: nil, options: nil)[0] as! UIView
-        addErrorView(blocker)
+        let blocker = Bundle.main.loadNibNamed(fileName, owner: nil, options: nil)![0] as! UIView
+        addErrorView(view: blocker)
     }
     
 }

@@ -10,23 +10,21 @@ import UIKit
 import BFGallery
 
 public class GalleryViewController : BFGalleryViewController {
-    override public func viewWillAppear(animated: Bool) {
+    
+    override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.title = "Photos"
-        self.view.backgroundColor = UIColor.blackColor()
-        self.tableView.backgroundColor = UIColor.blackColor()
+        self.view.backgroundColor = UIColor.black
+        self.tableView.backgroundColor = UIColor.black
         self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0) //hack
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
-    override public func viewDidDisappear(animated: Bool) {
+    override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if self.isBeingDismissed() || self.isMovingFromParentViewController() {
+        if self.isBeingDismissed || self.isMovingFromParentViewController {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
     }
     
-    override public func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
-    }
 }

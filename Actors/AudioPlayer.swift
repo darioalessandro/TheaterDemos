@@ -25,13 +25,13 @@ class AudioPlayer : Actor {
     override func receive(msg: Actor.Message) {
         switch(msg) {
         case let sound as PlaySound:
-            if let soundURL = NSBundle.mainBundle().URLForResource(sound.name, withExtension: sound.ext) {
+            if let soundURL = Bundle.main.url(forResource: sound.name, withExtension: sound.ext) {
                 var mySound: SystemSoundID = 0
-                AudioServicesCreateSystemSoundID(soundURL, &mySound)
+                AudioServicesCreateSystemSoundID(soundURL as CFURL, &mySound)
                 AudioServicesPlaySystemSound(mySound);
             }
         default:
-            super.receive(msg)
+            super.receive(msg: msg)
         }
     }
     

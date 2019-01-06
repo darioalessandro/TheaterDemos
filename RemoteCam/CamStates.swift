@@ -17,9 +17,9 @@ extension RemoteCamSession {
         lobby : RolePickerController) -> Receive {
             let alert = UIAlertController(title: "Taking picture",
                 message: nil,
-                preferredStyle: .Alert)
+                preferredStyle: .alert)
             
-            ^{lobby.presentViewController(alert, animated: true, completion: nil)}
+        ^{lobby.present(alert, animated: true, completion: nil)}
             
             return {[unowned self] (msg : Actor.Message) in
                 switch(msg) {
@@ -27,21 +27,21 @@ extension RemoteCamSession {
                 case let t as UICmd.OnPicture:
                     
                     if let imageData = t.pic,
-                               image = UIImage(data: imageData) {
+                        let image = UIImage(data: imageData) {
                         //#selector(Bank.onClickBtoA(_:)
                         UIImageWriteToSavedPhotosAlbum(image, self, Selector("image:didFinishSavingWithError:contextInfo:"), nil)
                     }
                     
-                    ^{alert.dismissViewControllerAnimated(true, completion: nil)}
+                    ^{alert.dismiss(animated: true, completion: nil)}
                     
-                    self.sendMessage([peer], msg: RemoteCmd.TakePicAck(sender: self.this))
+                    self.sendMessage(peer: [peer], msg: RemoteCmd.TakePicAck(sender: self.this))
                     
-                    let result = self.sendMessage([peer], msg: RemoteCmd.TakePicResp(sender: self.this, pic:t.pic, error: t.error))
+                    let result = self.sendMessage(peer: [peer], msg: RemoteCmd.TakePicResp(sender: self.this, pic:t.pic, error: t.error))
                     
                     if let failure = result as? Failure {
                         ^{
                             let a = UIAlertController(title: "Error sending picture",
-                                message: failure.error.description,
+                                                      message: failure.error.debugDescription,
                                 preferredStyle: .Alert)
                             
                             a.addAction(UIAlertAction(title: "Ok", style: .Cancel) { (action) in
@@ -55,7 +55,7 @@ extension RemoteCamSession {
                     self.unbecome()
                     
                 case let c as DisconnectPeer:
-                    ^{alert.dismissViewControllerAnimated(true, completion: nil)}
+                    ^{alert.dismiss(animated: true, completion: nil)}
                     if (c.peer.displayName == peer.displayName) {
                         self.popAndStartScanning()
                     }

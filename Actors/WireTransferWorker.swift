@@ -19,7 +19,7 @@ public class WireTransferWorker : Actor {
         switch(msg) {
         case let w as WithdrawResult:
             if w.result.isSuccess() {
-                self.transfer!.destination ! Deposit(sender: self.this, ammount: self.transfer!.ammount, operationId: NSUUID())
+                self.transfer!.destination ! Deposit(sender: self.this, ammount: self.transfer!.ammount, operationId: UUID())
             } else {
                 self.bank! ! TransferResult(sender: self.this, operationId: self.transfer!.operationId, result: w.result)
                 self.unbecome()
@@ -47,7 +47,7 @@ public class WireTransferWorker : Actor {
                 self.transfer = transfer
                 self.bank = self.transfer!.sender
                 become("transfering", state:transfering)
-                transfer.origin ! Withdraw(sender: this, ammount: transfer.ammount, operationId: NSUUID())
+                transfer.origin ! Withdraw(sender: this, ammount: transfer.ammount, operationId: UUID())
             }
             break
             
