@@ -19,19 +19,19 @@ end
 
 target 'ActorsDemo' do
     pod 'Starscream', '~> 3.0.6'
-    pod 'Theater', :git => 'git@github.com:darioalessandro/Theater.git', :branch => "fix-visibility"
+    pod 'Theater', '~> 0.9.1'
     gallery
 end
 
 target 'RemoteCam' do
     gallery    
     pod 'Starscream', '~> 3.0.6'
-    pod 'Theater', :git => 'git@github.com:darioalessandro/Theater.git', :branch => "fix-visibility"
+    pod 'Theater', '~> 0.9.1'
 end
 
 target 'ActorsTests' do
     pod 'Starscream', '~> 3.0.6'
-    pod 'Theater', :git => 'git@github.com:darioalessandro/Theater.git', :branch => "fix-visibility"
+    pod 'Theater', '~> 0.9.1'
     testing_pods
     gallery    
 end
