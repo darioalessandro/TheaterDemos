@@ -19,7 +19,7 @@ class WSRViewController : ViewCtrlActor<WSViewController>, UITableViewDataSource
     
     let states = States()
     
-    lazy var wsClient : ActorRef = self.actorOf(WebSocketClientWrapper.self, name:"WebSocketClientWrapper")
+    lazy var wsClient : ActorRef = self.actorOf(clz:WebSocketClientWrapper.self, name:"WebSocketClientWrapper")
     
     var receivedMessages : [(String, NSDate)] = [(String, NSDate)]()
     
@@ -29,12 +29,12 @@ class WSRViewController : ViewCtrlActor<WSViewController>, UITableViewDataSource
         return self.receivedMessages.count
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndIndexPathPath: IndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("device")!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "device")!
         let s : (String, NSDate) = self.receivedMessages[indexPath.row]
         cell.textLabel?.text = s.0
         cell.detailTextLabel?.text = s.1.description
@@ -183,8 +183,8 @@ class WSViewController : UIViewController, UITextFieldDelegate {
     }
     
     func addNotifications() {
-        NotificationCenter.defaultCenter.addObserver(self, selector:#selector(WSViewController.keyboardWillAppear(notification:)), name: UIKeyboardWillShowNotification, object: nil)
-        NotificationCenter.defaultCenter.addObserver(self, selector:#selector(WSViewController.keyboardWillDisappear(notification:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(WSViewController.keyboardWillAppear(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(WSViewController.keyboardWillDisappear(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
