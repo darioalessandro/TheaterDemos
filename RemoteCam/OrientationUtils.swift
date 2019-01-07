@@ -14,68 +14,68 @@ public class OrientationUtils {
     class public func transform(o : UIInterfaceOrientation) -> AVCaptureVideoOrientation {
         switch(o) {
             
-        case .LandscapeLeft:
-            return .LandscapeLeft
+        case .landscapeLeft:
+            return .landscapeLeft
             
-        case .LandscapeRight:
-            return .LandscapeRight
+        case .landscapeRight:
+            return .landscapeRight
             
-        case .PortraitUpsideDown:
-            return .PortraitUpsideDown
+        case .portraitUpsideDown:
+            return .portraitUpsideDown
             
         default:
-            return .Portrait;
+            return .portrait;
         }
     }
     
     class public func transformToUIKit(o : AVCaptureVideoOrientation) ->  UIInterfaceOrientation{
         switch(o) {
             
-        case .LandscapeLeft:
-            return .LandscapeLeft
+        case .landscapeLeft:
+            return .landscapeLeft
             
-        case .LandscapeRight:
-            return .LandscapeRight
+        case .landscapeRight:
+            return .landscapeRight
             
-        case .PortraitUpsideDown:
-            return .PortraitUpsideDown
+        case .portraitUpsideDown:
+            return .portraitUpsideDown
             
         default:
-            return .Portrait;
+            return .portrait;
         }
     }
     
     class public func transformToUIImage(o : AVCaptureVideoOrientation) ->  UIImageOrientation {
         switch(o) {
             
-        case .LandscapeLeft:
-            return .Left
+        case .landscapeLeft:
+            return .left
             
-        case .LandscapeRight:
-            return .Right
+        case .landscapeRight:
+            return .right
             
-        case .PortraitUpsideDown:
-            return .Down
+        case .portraitUpsideDown:
+            return .down
             
         default:
-            return .Up;
+            return .up;
         }
     }
     
     class public func transformOrientationToImage(o : UIInterfaceOrientation) -> UIImageOrientation {
         switch(o) {
             
-        case .LandscapeLeft:
-            return .Left
+        case .landscapeLeft:
+            return .left
             
-        case .LandscapeRight:
-            return .Right
+        case .landscapeRight:
+            return .right
             
-        case .PortraitUpsideDown:
-            return .Down
+        case .portraitUpsideDown:
+            return .down
             
         default:
-            return .Up
+            return .up
         }
     }
 }

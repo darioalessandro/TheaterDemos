@@ -13,10 +13,10 @@ import Theater
 extension AVCaptureDevicePosition {
     public func toggle() -> Try<AVCaptureDevicePosition> {
         switch(self) {
-        case .Back:
-            return Success(value: .Front)
-        case .Front:
-            return Success(value: .Back)
+        case .back:
+            return Success(value: .front)
+        case .front:
+            return Success(value: .back)
         default:
             return Failure(error: NSError(domain: "Unable to find camera position", code: 0, userInfo: nil))
         }
@@ -26,12 +26,12 @@ extension AVCaptureDevicePosition {
 extension AVCaptureFlashMode {
     public func next() -> AVCaptureFlashMode {
         switch(self) {
-        case .Off:
-            return .On
-        case .On:
-            return .Auto
-        case .Auto:
-            return .Off
+        case .off:
+            return .on
+        case .on:
+            return .auto
+        case .auto:
+            return .off
         }
     }
 }

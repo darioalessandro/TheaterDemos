@@ -20,22 +20,22 @@ class GreetingActor: ViewCtrlActor<GreetingActorController> {
     }
     
     override func receiveWithCtrl(ctrl: GreetingActorController) -> Receive {
-        return self.happy(ctrl)
+        return self.happy(ctrl: ctrl)
     }
     
     func happy(ctrl: GreetingActorController) -> Receive { return {[unowned self](msg : Message) in
             switch(msg) {
             case is Greeting:
-                ^{ctrl.say("Hello")}
+                ^{ctrl.say(msg: "Hello")}
                 
             case is Angry:
                 ^{ctrl.title = "Actor is Angry"
                     ctrl.rotateMouthToAngry()
                 }
-                self.become("angry", state: self.angry(ctrl), discardOld: true)
+                self.become(name: "angry", state: self.angry(ctrl: ctrl), discardOld: true)
             
             default:
-                self.receive(msg)
+                self.receive(msg: msg)
             }
         }
     }
@@ -43,16 +43,16 @@ class GreetingActor: ViewCtrlActor<GreetingActorController> {
     func angry(ctrl: GreetingActorController)  -> Receive { return {[unowned self](msg : Message) in
             switch(msg) {
             case is Greeting:
-                ^{ctrl.say("Go away ")}
+                ^{ctrl.say(msg: "Go away ")}
                 
             case is Happy:
                 ^{ctrl.title = "Actor is Happy"
                     ctrl.rotateMouthToHappy()
                 }
-                self.become("happy", state: self.happy(ctrl), discardOld: true)
+                self.become(name: "happy", state: self.happy(ctrl: ctrl), discardOld: true)
                 
             default:
-                self.receive(msg)
+                self.receive(msg: msg)
             }
         }
     }
@@ -63,7 +63,7 @@ class GreetingActorController : UIViewController {
     
     lazy var system : ActorSystem = ActorSystem(name : "GreetingActorController")
     
-    lazy var greetingActor : ActorRef = self.system.actorOf(GreetingActor.self, name:"GreetingActor")
+    lazy var greetingActor : ActorRef = self.system.actorOf(clz: GreetingActor.self, name:"GreetingActor")
     
     @IBOutlet weak var mouth : UIImageView!
     
@@ -83,31 +83,31 @@ class GreetingActorController : UIViewController {
         super.viewDidLoad()
         greetingActor ! SetViewCtrl(ctrl: self)
         greetingActor ! Angry(sender: nil)
-        self.navigationController?.toolbarHidden = false
+        self.navigationController?.isToolbarHidden = false
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        if self.isBeingDismissed() || self.isMovingFromParentViewController() {
+    override func viewWillDisappear(_ animated: Bool) {
+        if self.isBeingDismissed || self.isMovingFromParentViewController {
             system.stop()
-            self.navigationController?.toolbarHidden = true
+            self.navigationController?.isToolbarHidden = true
         }
     }
     
     func say(msg : String) {
-        let alert : UIAlertController = UIAlertController(title: "Actor says:", message: msg, preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .Cancel, handler: nil))
-        self.presentViewController(alert, animated: true,completion: nil)
+        let alert : UIAlertController = UIAlertController(title: "Actor says:", message: msg, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+        self.present(alert, animated: true,completion: nil)
     }
     
     func rotateMouthToAngry() {
-        UIView.animateWithDuration(0.3, animations: {
-            self.mouth.transform = CGAffineTransformIdentity
+        UIView.animate(withDuration: 0.3, animations: {
+            self.mouth.transform = __CGAffineTransformMake(1, 0, 0, 1, 0, 0)
             }, completion: nil)
     }
     
     func rotateMouthToHappy() {
-        UIView.animateWithDuration(0.3, animations: {
-            self.mouth.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
+        UIView.animate(withDuration: 0.3, animations: {
+            self.mouth.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
         }, completion: nil)
         
     }

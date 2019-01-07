@@ -20,8 +20,8 @@ public class Bank : ViewCtrlActor<AccountsViewController> {
         super.init(context: context, ref: ref)
     }
     
-    lazy var accountA : ActorRef = self.actorOf(Account.self, name: "AccountA")
-    lazy var accountB : ActorRef = self.actorOf(Account.self, name: "AccountB")
+    lazy var accountA : ActorRef = self.actorOf(clz: Account.self, name: "AccountA")
+    lazy var accountB : ActorRef = self.actorOf(clz: Account.self, name: "AccountB")
     
     var accountALabel : Optional<UILabel> = nil
     var accountBLabel : Optional<UILabel> = nil
@@ -39,34 +39,34 @@ public class Bank : ViewCtrlActor<AccountsViewController> {
     public override func receiveWithCtrl(ctrl : AccountsViewController) -> Receive {
         
         ^{
-            ctrl.bToA.addTarget(self, action: #selector(Bank.onClickBtoA(_:)), forControlEvents: .TouchUpInside)
-            ctrl.aToB.addTarget(self, action: #selector(Bank.onClickAtoB(_:)), forControlEvents: .TouchUpInside)
+            ctrl.bToA.addTarget(self, action: #selector(Bank.onClickBtoA(click:)), for: .touchUpInside)
+            ctrl.aToB.addTarget(self, action: #selector(Bank.onClickAtoB(click:)), for: .touchUpInside)
             self.accountALabel = ctrl.accountABalance
             self.accountBLabel = ctrl.accountBBalance
         }
         
-        accountA ! SetAccountNumber(accountNumber: "AccountA", operationId: NSUUID())
-        accountB ! SetAccountNumber(accountNumber: "AccountB", operationId: NSUUID())
+        accountA ! SetAccountNumber(accountNumber: "AccountA", operationId: UUID())
+        accountB ! SetAccountNumber(accountNumber: "AccountB", operationId: UUID())
         
         print("accountA \(accountA.path.asString)")
         print("accountB \(accountB.path.asString)")
         
-        accountA ! Deposit(sender: this, ammount: 10, operationId: NSUUID())
-        accountB ! Deposit(sender: this, ammount: 10, operationId: NSUUID())
+        accountA ! Deposit(sender: this, ammount: 10, operationId: UUID())
+        accountB ! Deposit(sender: this, ammount: 10, operationId: UUID())
         
         
         return {[unowned self](msg : Actor.Message) in
             
         switch(msg) {
             case let w as Transfer:
-            if self.transfers.keys.contains(w.operationId.UUIDString) == false {
-                self.transfers[w.operationId.UUIDString] = (w,nil)
-                let wireTransfer = self.actorOf(WireTransferWorker.self, name:"WorkerId\(w.operationId.UUIDString)") //TODO: We need to add timeout
+                if self.transfers.keys.contains(w.operationId.uuidString) == false {
+                    self.transfers[w.operationId.uuidString] = (w,nil)
+                    let wireTransfer = self.actorOf(clz: WireTransferWorker.self, name:"WorkerId\(w.operationId.uuidString)") //TODO: We need to add timeout
                 wireTransfer ! w
             }
             
             case let w as TransferResult:
-            let uuid = w.operationId.UUIDString
+                let uuid = w.operationId.uuidString
             if let transfer = self.transfers[uuid] {
                 self.transfers[uuid] = (transfer.0, w)
             }
@@ -77,7 +77,7 @@ public class Bank : ViewCtrlActor<AccountsViewController> {
                 }
             }
             
-            self.stop(w.sender!)
+            self.stop(actorRef: w.sender!)
             
             case let w as OnBalanceChanged:
             ^{
@@ -99,7 +99,7 @@ public class Bank : ViewCtrlActor<AccountsViewController> {
             }
             
         default:
-            self.receive(msg)
+            self.receive(msg: msg)
         }
         }
     }

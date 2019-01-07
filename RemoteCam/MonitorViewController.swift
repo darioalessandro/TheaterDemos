@@ -19,7 +19,7 @@ public class MonitorActor : ViewCtrlActor<MonitorViewController> {
     
     public required init(context: ActorSystem, ref: ActorRef) {
         super.init(context: context, ref: ref)
-        let session : Optional<ActorRef> = RemoteCamSystem.shared.selectActor("RemoteCam/user/RemoteCam Session")
+        let session : Optional<ActorRef> = RemoteCamSystem.shared.selectActor(actorPath: "RemoteCam/user/RemoteCam Session")
         session! ! UICmd.BecomeMonitor(sender: ref)
     }
     
@@ -28,27 +28,27 @@ public class MonitorActor : ViewCtrlActor<MonitorViewController> {
             switch(msg) {
                 
             case is UICmd.BecomeMonitorFailed:
-                ^{ctrl.navigationController?.popViewControllerAnimated(true)}
+                ^{ctrl.navigationController?.popViewController(animated: true)}
                 
             case let cam as UICmd.ToggleCameraResp:
-                self.setFlashMode(ctrl, flashMode:  cam.flashMode)
+                self.setFlashMode(ctrl: ctrl, flashMode:  cam.flashMode)
                 
             case let flash as RemoteCmd.ToggleFlashResp:
-                self.setFlashMode(ctrl, flashMode:  flash.flashMode)
+                self.setFlashMode(ctrl: ctrl, flashMode:  flash.flashMode)
                 
             case is UICmd.UnbecomeMonitor:
-                let session : Optional<ActorRef> = RemoteCamSystem.shared.selectActor("RemoteCam/user/RemoteCam Session")
+                let session : Optional<ActorRef> = RemoteCamSystem.shared.selectActor(actorPath: "RemoteCam/user/RemoteCam Session")
                 session! ! msg
                 
             case let f as RemoteCmd.OnFrame:
                 if let img = UIImage(data: f.data) {
                     var t : CGAffineTransform?
                     switch(img.imageOrientation) {
-                        case .Left, .Right:
-                            let multiplier = (f.camPosition == .Back) ? Double(-1) : Double(1)
-                            t = CGAffineTransformMakeRotation(CGFloat(multiplier * M_PI_2))
-                        case .Up:
-                            t = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
+                    case .left, .right:
+                        let multiplier = (f.camPosition == .back) ? Double(-1) : Double(1)
+                        t = CGAffineTransform(rotationAngle: CGFloat(multiplier * Double.pi))
+                    case .up:
+                            t = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
                         default:
                             print("none")
                     }
@@ -59,7 +59,7 @@ public class MonitorActor : ViewCtrlActor<MonitorViewController> {
                 }
                 
             default:
-                self.receive(msg)
+                self.receive(msg: msg)
             }
         }
     }
@@ -67,11 +67,11 @@ public class MonitorActor : ViewCtrlActor<MonitorViewController> {
     func setFlashMode(ctrl : MonitorViewController, flashMode : AVCaptureFlashMode?) {
         if let f = flashMode {
             switch(f) {
-            case .Off:
+            case .off:
                 ^{ctrl.flashStatus.text = "Off"}
-            case .On:
+            case .on:
                 ^{ctrl.flashStatus.text = "On"}
-            case .Auto:
+            case .auto:
                 ^{ctrl.flashStatus.text = "Auto"}
             }
         } else {
@@ -87,9 +87,9 @@ UI for the monitor.
 
 public class MonitorViewController : iAdViewController {
     
-    let session = RemoteCamSystem.shared.selectActor("RemoteCam/user/RemoteCam Session")!
+    let session = RemoteCamSystem.shared.selectActor(actorPath: "RemoteCam/user/RemoteCam Session")!
     
-    let monitor = RemoteCamSystem.shared.actorOf(MonitorActor.self, name: "MonitorActor")
+    let monitor = RemoteCamSystem.shared.actorOf(clz: MonitorActor.self, name: "MonitorActor")
     
     let timer : RCTimer = RCTimer()
     
@@ -127,12 +127,13 @@ public class MonitorViewController : iAdViewController {
     }
     
     @IBAction func showGallery(sender: UIButton) {
-        let ctrl = GalleryViewController(nibName: "BFGalleryViewController", bundle: NSBundle(forClass:BFGalleryViewController.self),  mediaProvider:BFGAssetsManagerProviderPhotoLibrary)
-        self.navigationController?.pushViewController(ctrl, animated: true)
+        if let ctrl = GalleryViewController(nibName: "BFGalleryViewController", bundle: Bundle(for:BFGalleryViewController.self),  mediaProvider:BFGAssetsManagerProviderPhotoLibrary) {
+            self.navigationController?.pushViewController(ctrl, animated: true)
+        }
     }
     
     @IBAction func goBack(sender: UIButton) {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     /**
@@ -145,21 +146,21 @@ public class MonitorViewController : iAdViewController {
             return "Taking picture in \(seconds) seconds"
         }
         
-        let alert = UIAlertController(title: timerAlertTitle(Int(round(self.timerSlider.value))),
+        let alert = UIAlertController(title: timerAlertTitle(seconds: Int(round(self.timerSlider.value))),
             message: nil,
-            preferredStyle: .Alert)
+            preferredStyle: .alert)
         
-        alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel) { (a) in
-            alert.dismissViewControllerAnimated(true, completion: nil)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { (a) in
+            alert.dismiss(animated: true, completion: nil)
             self.timer.cancel()
         })
         
         self.soundManager.playBeepSound(CPSoundManagerAudioTypeSlow)
         
-        self.presentViewController(alert, animated: true) {[unowned self] in
-            self.timer.startTimerWithDuration(Int(round(self.timerSlider.value)), withTickHandler: {[unowned self](t) in
-                ^^{ alert.title = timerAlertTitle(t.timeRemaining())}
-                switch(t.timeRemaining()) {
+        self.present(alert, animated: true) {[unowned self] in
+            self.timer.start(withDuration: Int(round(self.timerSlider.value)), withTickHandler: {[unowned self](t) in
+                ^^{ alert.title = timerAlertTitle(seconds: t!.timeRemaining())}
+                switch(t!.timeRemaining()) {
                     case let l where l > 3:
                         self.soundManager.playBeepSound(CPSoundManagerAudioTypeSlow)
                     case 3:
@@ -168,17 +169,17 @@ public class MonitorViewController : iAdViewController {
                         break
                 }
                 }, cancelHandler: {(t) in
-                    ^^{alert.dismissViewControllerAnimated(true, completion: nil)}
+                    ^^{alert.dismiss(animated: true, completion: nil)}
                 }, andCompletionHandler: {[unowned self] (t) in
-                    ^^{alert.dismissViewControllerAnimated(true, completion: nil)}
+                    ^^{alert.dismiss(animated: true, completion: nil)}
                     self.session ! UICmd.TakePicture(sender: nil)
                 })
         }
     }
     
-    override public func viewWillAppear(animated: Bool) {
+    override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
     }
     
     override public func viewDidLoad() {
@@ -187,9 +188,9 @@ public class MonitorViewController : iAdViewController {
         self.configureTimerUI()
     }
     
-    override public func viewDidDisappear(animated: Bool) {
+    override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if self.isBeingDismissed() || self.isMovingFromParentViewController() {
+        if self.isBeingDismissed || self.isMovingFromParentViewController {
             monitor ! UICmd.UnbecomeMonitor(sender: nil)
             monitor ! Actor.Harakiri(sender: nil)
         }
@@ -198,19 +199,11 @@ public class MonitorViewController : iAdViewController {
     private func configureTimerUI() {
         self.sliderContainer.layer.cornerRadius = 30.0
         self.sliderContainer.clipsToBounds=true
-        self.timerSlider.layer.anchorPoint = CGPointMake(1, 1)
-        self.timerSlider.transform = CGAffineTransformMakeRotation(CGFloat(-M_PI_2))
+        self.timerSlider.layer.anchorPoint = CGPoint.init(x: 1.0, y: 1.0)
+        self.timerSlider.transform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi))
         self.timerSlider.minimumTrackTintColor = sliderColor1
         self.timerSlider.maximumTrackTintColor = sliderColor2
         self.timerSlider.thumbTintColor = sliderColor1
-    }
-    
-    override public func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
-    }
-    
-    override public func prefersStatusBarHidden() -> Bool {
-        return true;
     }
     
     deinit {

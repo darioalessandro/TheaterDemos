@@ -17,14 +17,14 @@ public class AccountsViewController : UIViewController {
     @IBOutlet weak var accountBBalance: UILabel!
     
     lazy var system = ActorSystem(name : "BankSystem")
-    lazy var bank : ActorRef = self.system.actorOf(Bank.self, name: "Bank")
+    lazy var bank : ActorRef = self.system.actorOf(clz: Bank.self, name: "Bank")
     
     override public func viewDidLoad() {
          bank ! SetViewCtrl(ctrl: self)
     }
     
-    override public func viewWillDisappear(animated: Bool) {
-        if self.isBeingDismissed() || self.isMovingFromParentViewController() {
+    override public func viewWillDisappear(_ animated: Bool) {
+        if self.isBeingDismissed || self.isMovingFromParentViewController {
             system.stop()
         }
     }
