@@ -1,6 +1,6 @@
 {
   "name": "BFGallery",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "summary": "Objective C Gallery.",
   "description": "Objective C Gallery.",
   "requires_arc": true,
@@ -18,9 +18,9 @@
   },
   "source": {
     "git": "https://github.com/darioalessandro/BlackFireGallery.git",
-    "tag": "0.1.2"
+    "tag": "0.1.5"
   },
-  "source_files": "BFGallery/BFGalleryLib/*",
+  "source_files": "BFGallery/BFGalleryLib/*.{h,m}",
   "subspecs": [
     {
       "name": "json",

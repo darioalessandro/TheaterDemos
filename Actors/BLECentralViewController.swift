@@ -60,6 +60,10 @@ class DeviceViewController : UITableViewController {
         reactive! ! PeripheralActor.OnClick(sender : nil)
     }
     
+    override public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return super.tableView(tableView, cellForRowAt: indexPath)
+    }
+    
     @IBOutlet weak var stateRow: UITableViewCell!
     let reactive : Optional<ActorRef> = RemoteCamSystem.shared.selectActor(actorPath: "RemoteCam/user/BLEControllersActor")
     

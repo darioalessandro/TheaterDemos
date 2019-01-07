@@ -9,7 +9,7 @@ use_frameworks!
 
 
 def gallery
-    pod 'BFGallery' , :git => "https://github.com/darioalessandro/BlackFireGallery.git", :tag => "0.1.2"
+    pod 'BFGallery' , :git => "https://github.com/darioalessandro/BlackFireGallery.git", :tag => "0.1.5"
 end
 
 def testing_pods

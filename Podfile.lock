@@ -1,7 +1,7 @@
 PODS:
-  - BFGallery (0.1.2):
-    - BFGallery/json (= 0.1.2)
-  - BFGallery/json (0.1.2)
+  - BFGallery (0.1.5):
+    - BFGallery/json (= 0.1.5)
+  - BFGallery/json (0.1.5)
   - Nimble (7.3.1)
   - Quick (1.3.2)
   - Starscream (3.0.6)
@@ -9,7 +9,7 @@ PODS:
     - Starscream (~> 3.0.6)
 
 DEPENDENCIES:
-  - BFGallery (from `https://github.com/darioalessandro/BlackFireGallery.git`, tag `0.1.2`)
+  - BFGallery (from `https://github.com/darioalessandro/BlackFireGallery.git`, tag `0.1.5`)
   - Nimble (= 7.3.1)
   - Quick (~> 1.3.2)
   - Starscream (~> 3.0.6)
@@ -24,7 +24,7 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   BFGallery:
     :git: https://github.com/darioalessandro/BlackFireGallery.git
-    :tag: 0.1.2
+    :tag: 0.1.5
   Theater:
     :branch: fix-visibility
     :git: "git@github.com:darioalessandro/Theater.git"
@@ -32,18 +32,18 @@ EXTERNAL SOURCES:
 CHECKOUT OPTIONS:
   BFGallery:
     :git: https://github.com/darioalessandro/BlackFireGallery.git
-    :tag: 0.1.2
+    :tag: 0.1.5
   Theater:
-    :commit: 966100cf12a31c08323ab0a4b7d40f2a4e33bb30
+    :commit: 8b922a1204f7dfc6e3e522ce034c17da2b8263c3
     :git: "git@github.com:darioalessandro/Theater.git"
 
 SPEC CHECKSUMS:
-  BFGallery: 5e89ca150a6b966b38b206b3a4e54d7fa358baf0
+  BFGallery: 32104cd088b30482c4fadb5386bfd953115fafa9
   Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
   Quick: 2623cb30d7a7f41ca62f684f679586558f483d46
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   Theater: 7e2a6b3edcb88ce0f302424cf5b9e035519143b0
 
-PODFILE CHECKSUM: ce57b7d65c2879be09f4b6286415e10dd1eeabe3
+PODFILE CHECKSUM: e108a0abf72528cea375757075fc053a9d6470fe
 
 COCOAPODS: 1.5.3

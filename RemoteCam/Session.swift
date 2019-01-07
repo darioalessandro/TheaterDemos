@@ -179,7 +179,6 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
                 this ! UICmd.FailedToSaveImage(sender: nil, error: nsError)
             }
         }
-    }
     
     public func sendMessage(peer : [MCPeerID], msg : Actor.Message, mode : MCSessionSendDataMode = .reliable) -> Try<Message> {
         do {

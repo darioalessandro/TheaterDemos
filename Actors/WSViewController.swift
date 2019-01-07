@@ -33,7 +33,7 @@ class WSRViewController : ViewCtrlActor<WSViewController>, UITableViewDataSource
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "device")!
         let s : (String, NSDate) = self.receivedMessages[indexPath.row]
         cell.textLabel?.text = s.0
@@ -51,7 +51,7 @@ class WSRViewController : ViewCtrlActor<WSViewController>, UITableViewDataSource
         return {[unowned self] (msg : Actor.Message) in
             switch(msg) {
             case is WebSocketClientWrapper.Connect:
-                self.become(name:  self.states.disconnected, state: self.disconnected(ctrl))
+                self.become(name:  self.states.disconnected, state: self.disconnected(ctrl: ctrl))
                 self.this ! msg
                 
             default:
@@ -67,7 +67,7 @@ class WSRViewController : ViewCtrlActor<WSViewController>, UITableViewDataSource
             switch(msg) {
             case let w as WebSocketClientWrapper.Connect:
                 self.become(name: self.states.connecting, state: self.connecting(ctrl: ctrl, url:w.url))
-                self.WebSocketClientWrapper.Connect(url: w.url, sender: self.this)
+                self.wsClient ! WebSocketClientWrapper.Connect(url: w.url, sender: self.this)
                 ^{ ctrl.title = "Connecting"}
                 
             case let m as WebSocketClientWrapper.OnDisconnect:
@@ -113,28 +113,28 @@ class WSRViewController : ViewCtrlActor<WSViewController>, UITableViewDataSource
                     self.receivedMessages.append(("You: \(w.message)", NSDate.init()))
                     let i = self.receivedMessages.count - 1
                     ^{
-                      let lastRow = IndexPath.init(forRow: i, inSection: 0)
-                      ctrl.tableView.insertRowsAtIndexPaths([lastRow], withRowAnimation: UITableViewRowAnimation.Automatic)
-                      ctrl.tableView.scrollToRowAtIndexPath(lastRow, atScrollPosition: UITableViewScrollPosition.Middle, animated: true)}
-                    self.wsClient ! WebSocketClient.SendMessage(sender: self.this, message: w.message)
+                      let lastRow = IndexPath.init(row: i, section: 0)
+                        ctrl.tableView.insertRows(at: [lastRow], with: UITableViewRowAnimation.automatic)
+                        ctrl.tableView.scrollToRow(at: lastRow, at: UITableViewScrollPosition.middle, animated: true)}
+                    self.wsClient ! WebSocketClientWrapper.SendMessage(sender: self.this, message: w.message)
                 
                 case let w as WebSocketClientWrapper.OnMessage:
                     self.receivedMessages.append(("Server: \(w.message)", NSDate.init()))
                     let i = self.receivedMessages.count - 1
                     ^{
-                      let lastRow = IndexPath.init(forRow: i, inSection: 0)
-                      ctrl.tableView.insertRowsAtIndexPaths([lastRow], withRowAnimation: UITableViewRowAnimation.Automatic)
-                      ctrl.tableView.scrollToRowAtIndexPath(lastRow, atScrollPosition: UITableViewScrollPosition.Middle, animated: true)}
+                      let lastRow = IndexPath.init(row: i, section: 0)
+                        ctrl.tableView.insertRows(at: [lastRow], with: UITableViewRowAnimation.automatic)
+                        ctrl.tableView.scrollToRow(at: lastRow, at: UITableViewScrollPosition.middle, animated: true)}
                     
                 case let m as WebSocketClientWrapper.OnDisconnect:
-                    self.popToState(self.states.disconnected)
+                    self.popToState(name: self.states.disconnected)
                     self.this ! m
-                    self.scheduleOnce(1,block: {
-                        self.this ! WebSocketClient.Connect(url: url, sender: self.this)
+                    self.scheduleOnce(seconds: 1,block: {
+                        self.this ! WebSocketClientWrapper.Connect(url: url, sender: self.this)
                     })
                     
                 default:
-                    self.receive(msg)
+                    self.receive(msg: msg)
             }
         }
     }
@@ -169,7 +169,7 @@ class WSViewController : UIViewController, UITextFieldDelegate {
         wsCtrl ! SetViewCtrl(ctrl: self)
         wsCtrl ! WebSocketClientWrapper.Connect(url: NSURL(string: "wss://echo.websocket.org")!, sender : nil)
         self.addNotifications()
-        send.addTarget(self, action: #selector(WSViewController.onClick(_:)), for: .TouchUpInside)
+        send.addTarget(self, action: #selector(WSViewController.onClick(btn:)), for: .touchUpInside)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -198,7 +198,7 @@ class WSViewController : UIViewController, UITextFieldDelegate {
     
     public func keyboardWillAppear(notification: NSNotification){
         let userInfo:Dictionary = notification.userInfo!
-        let keyboardSize:CGSize = (userInfo.objectForKey(UIKeyboardFrameBeginUserInfoKey)! as AnyObject).cgRectValue.size
+        let keyboardSize: CGSize = (userInfo[UIKeyboardFrameBeginUserInfoKey] as AnyObject).cgRectValue.size
         
         bottomTextField.constant = keyboardSize.height;
         self.view.setNeedsUpdateConstraints()
