@@ -34,6 +34,15 @@ target 'RemoteCam' do
     protobuf
 end
 
+target 'RemoteCamTests' do
+    pod 'Starscream', '~> 3.0.6'
+    pod 'Theater', '~> 0.9.1'
+    pod 'SwiftProtobuf', '~> 1.0'
+    gallery
+    protobuf
+    testing_pods
+end
+
 target 'ActorsTests' do
     pod 'Starscream', '~> 3.0.6'
     pod 'Theater', '~> 0.9.1'

@@ -103,9 +103,15 @@
 		06EEA7D41BBB7305005787AE /* BLECentralActors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06EEA7D31BBB7305005787AE /* BLECentralActors.swift */; };
 		06EEA7D71BBB7360005787AE /* BLEMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06EEA7D61BBB7360005787AE /* BLEMessages.swift */; };
 		06EEA7DE1BBB8CE2005787AE /* WSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06EEA7DD1BBB8CE2005787AE /* WSViewController.swift */; };
-		586A67A221E42EEE002737E1 /* remote-commands.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A67A121E42EEE002737E1 /* remote-commands.pb.swift */; };
+		586A67A521E458E1002737E1 /* RemoteCommandsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A67A421E458E1002737E1 /* RemoteCommandsTests.swift */; };
+		586A67A721E45C38002737E1 /* RemoteCommands.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A67A621E45C38002737E1 /* RemoteCommands.pb.swift */; };
+		586A67A821E45C38002737E1 /* RemoteCommands.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A67A621E45C38002737E1 /* RemoteCommands.pb.swift */; };
+		586A67AD21E461F0002737E1 /* RemoteCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A67AC21E461F0002737E1 /* RemoteCommandBuilder.swift */; };
+		586A67AE21E461F0002737E1 /* RemoteCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A67AC21E461F0002737E1 /* RemoteCommandBuilder.swift */; };
+		586A67B121E4650B002737E1 /* RemoteCommandBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A67AF21E4650B002737E1 /* RemoteCommandBuilderTests.swift */; };
 		91F2378CB8D8F85607989EEF /* Pods_ActorsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F387643C93F7B5C8646D47A2 /* Pods_ActorsTests.framework */; };
 		A2A0B37A0A55DF2E27B9B443 /* Pods_RemoteCam.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E73981FFC950F0C950FDD1 /* Pods_RemoteCam.framework */; };
+		B50CD1B50737F384FACC5EB6 /* Pods_RemoteCamTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01CBFB43C3E1F958455B7527 /* Pods_RemoteCamTests.framework */; };
 		FBBAD9C9C282699F45D2FFDE /* Pods_ActorsDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFB6137800928D81F1A79C6 /* Pods_ActorsDemo.framework */; };
 /* End PBXBuildFile section */
 
@@ -150,6 +156,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		01CBFB43C3E1F958455B7527 /* Pods_RemoteCamTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RemoteCamTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0512CCB0939AAABE96F23F13 /* Pods-ActorsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ActorsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ActorsTests/Pods-ActorsTests.release.xcconfig"; sourceTree = "<group>"; };
 		0602E4EA1BEA4FC90015A988 /* BFGallery.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BFGallery.framework; path = "Pods/../build/Debug-iphoneos/BFGallery.framework"; sourceTree = "<group>"; };
 		0602E4EC1BEA4FDE0015A988 /* BFGallery.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BFGallery.framework; path = "Pods/../build/Debug-iphoneos/BFGallery.framework"; sourceTree = "<group>"; };
@@ -244,11 +251,18 @@
 		06EEA7DB1BBB87EE005787AE /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = "Pods/../build/Debug-iphoneos/Starscream.framework"; sourceTree = "<group>"; };
 		06EEA7DD1BBB8CE2005787AE /* WSViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = WSViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		06FA4AD71BC8B8E9005608E6 /* CocoaLumberjack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaLumberjack.framework; path = "Pods/../build/Debug-iphoneos/CocoaLumberjack.framework"; sourceTree = "<group>"; };
+		1945B0BCA960968625FE55AE /* Pods-RemoteCamTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RemoteCamTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RemoteCamTests/Pods-RemoteCamTests.debug.xcconfig"; sourceTree = "<group>"; };
 		27B79A6BB7E56A401AD5A495 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A5377947BACAE324BB4B650 /* Pods-RemoteCamTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RemoteCamTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RemoteCamTests/Pods-RemoteCamTests.release.xcconfig"; sourceTree = "<group>"; };
 		46B360E32D276B7FED08D679 /* Pods-RemoteCam.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RemoteCam.release.xcconfig"; path = "Pods/Target Support Files/Pods-RemoteCam/Pods-RemoteCam.release.xcconfig"; sourceTree = "<group>"; };
 		4C8A9E476AE568C4EF0B56F2 /* Pods-ActorsDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ActorsDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ActorsDemo/Pods-ActorsDemo.release.xcconfig"; sourceTree = "<group>"; };
 		513E00B1656D167B80F3A032 /* Pods-RemoteCam.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RemoteCam.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RemoteCam/Pods-RemoteCam.debug.xcconfig"; sourceTree = "<group>"; };
-		586A67A121E42EEE002737E1 /* remote-commands.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "remote-commands.pb.swift"; sourceTree = "<group>"; };
+		586A67A321E458E1002737E1 /* RemoteCamTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RemoteCamTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		586A67A421E458E1002737E1 /* RemoteCommandsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCommandsTests.swift; sourceTree = "<group>"; };
+		586A67A621E45C38002737E1 /* RemoteCommands.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteCommands.pb.swift; sourceTree = "<group>"; };
+		586A67A921E45C65002737E1 /* RemoteCommands.proto */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.protobuf; path = RemoteCommands.proto; sourceTree = "<group>"; };
+		586A67AC21E461F0002737E1 /* RemoteCommandBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCommandBuilder.swift; sourceTree = "<group>"; };
+		586A67AF21E4650B002737E1 /* RemoteCommandBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCommandBuilderTests.swift; sourceTree = "<group>"; };
 		62E73981FFC950F0C950FDD1 /* Pods_RemoteCam.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RemoteCam.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		696C16215ABF6178D2D24ED4 /* Pods_Actors.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Actors.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		766A8C017AE74FE9944AAE3F /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -275,6 +289,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B50CD1B50737F384FACC5EB6 /* Pods_RemoteCamTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,6 +423,9 @@
 			isa = PBXGroup;
 			children = (
 				069284351BE5BF5C00AF4678 /* Info.plist */,
+				586A67A421E458E1002737E1 /* RemoteCommandsTests.swift */,
+				586A67A321E458E1002737E1 /* RemoteCamTests-Bridging-Header.h */,
+				586A67AF21E4650B002737E1 /* RemoteCommandBuilderTests.swift */,
 			);
 			path = RemoteCamTests;
 			sourceTree = "<group>";
@@ -429,12 +447,14 @@
 		069284611BE5C1BD00AF4678 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				586A67A121E42EEE002737E1 /* remote-commands.pb.swift */,
+				586A67A921E45C65002737E1 /* RemoteCommands.proto */,
+				586A67A621E45C38002737E1 /* RemoteCommands.pb.swift */,
 				069284451BE5C0E600AF4678 /* MultipeerMessages.swift */,
 				0684A2D81BE6E9D400F0B238 /* RemoteCamSession */,
 				069284491BE5C0E600AF4678 /* States.swift */,
 				0684A2D01BE65A9800F0B238 /* OrientationUtils.swift */,
 				060B1E141BE7079800077BCC /* Helpers */,
+				586A67AC21E461F0002737E1 /* RemoteCommandBuilder.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -578,6 +598,7 @@
 				62E73981FFC950F0C950FDD1 /* Pods_RemoteCam.framework */,
 				C26DDC475791D92720DC4C29 /* Pods_Theater.framework */,
 				FAFB6137800928D81F1A79C6 /* Pods_ActorsDemo.framework */,
+				01CBFB43C3E1F958455B7527 /* Pods_RemoteCamTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -593,6 +614,8 @@
 				46B360E32D276B7FED08D679 /* Pods-RemoteCam.release.xcconfig */,
 				804EC824A5887C3C5F84190A /* Pods-ActorsDemo.debug.xcconfig */,
 				4C8A9E476AE568C4EF0B56F2 /* Pods-ActorsDemo.release.xcconfig */,
+				1945B0BCA960968625FE55AE /* Pods-RemoteCamTests.debug.xcconfig */,
+				3A5377947BACAE324BB4B650 /* Pods-RemoteCamTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -605,6 +628,7 @@
 			buildConfigurationList = 069284361BE5BF5C00AF4678 /* Build configuration list for PBXNativeTarget "RemoteCam" */;
 			buildPhases = (
 				1C2CC4EFD753FBBEAE7C286A /* [CP] Check Pods Manifest.lock */,
+				586A67AB21E45DF0002737E1 /* ShellScript */,
 				069284181BE5BF5B00AF4678 /* Sources */,
 				069284191BE5BF5B00AF4678 /* Frameworks */,
 				0692841A1BE5BF5B00AF4678 /* Resources */,
@@ -624,9 +648,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 069284391BE5BF5C00AF4678 /* Build configuration list for PBXNativeTarget "RemoteCamTests" */;
 			buildPhases = (
+				3F267CA6A6AA30322E002B9B /* [CP] Check Pods Manifest.lock */,
+				586A67AA21E45D21002737E1 /* ShellScript */,
 				0692842B1BE5BF5C00AF4678 /* Sources */,
 				0692842C1BE5BF5C00AF4678 /* Frameworks */,
 				0692842D1BE5BF5C00AF4678 /* Resources */,
+				A638CEB7E12358164D3EC81E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -695,6 +722,7 @@
 					};
 					0692842E1BE5BF5C00AF4678 = {
 						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 1010;
 						TestTargetID = 0692841B1BE5BF5B00AF4678;
 					};
 					06E1D4F11BB7699700E07321 = {
@@ -830,6 +858,62 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		3F267CA6A6AA30322E002B9B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RemoteCamTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		586A67AA21E45D21002737E1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd $SRCROOT/RemoteCam\nprotoc --swift_out=. RemoteCommands.proto\n";
+		};
+		586A67AB21E45DF0002737E1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd $SRCROOT/RemoteCam\nprotoc --swift_out=. RemoteCommands.proto\n";
+		};
 		95381510987EAA71A02041AE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -870,6 +954,38 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A638CEB7E12358164D3EC81E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-RemoteCamTests/Pods-RemoteCamTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/BFGallery/BFGallery.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/Theater/Theater.framework",
+				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
+				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BFGallery.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftProtobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Theater.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RemoteCamTests/Pods-RemoteCamTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CACA44FD9BEC4EADDD0CE1C8 /* [CP] Embed Pods Frameworks */ = {
@@ -937,9 +1053,10 @@
 				0684A2E21BE702BC00F0B238 /* CPSoundManager.m in Sources */,
 				0692841F1BE5BF5B00AF4678 /* AppDelegate.swift in Sources */,
 				0684A2D11BE65A9800F0B238 /* OrientationUtils.swift in Sources */,
-				586A67A221E42EEE002737E1 /* remote-commands.pb.swift in Sources */,
+				586A67AD21E461F0002737E1 /* RemoteCommandBuilder.swift in Sources */,
 				0650241A1BEA413900311C8A /* PurchasesRestorer.m in Sources */,
 				0692844F1BE5C0E600AF4678 /* MultipeerMessages.swift in Sources */,
+				586A67A721E45C38002737E1 /* RemoteCommands.pb.swift in Sources */,
 				069284531BE5C0E600AF4678 /* States.swift in Sources */,
 				0650241C1BEA413900311C8A /* InAppPurchasesManager.m in Sources */,
 				0624C0411BE8616E001CC738 /* CameraAccess.swift in Sources */,
@@ -960,6 +1077,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				586A67AE21E461F0002737E1 /* RemoteCommandBuilder.swift in Sources */,
+				586A67A821E45C38002737E1 /* RemoteCommands.pb.swift in Sources */,
+				586A67A521E458E1002737E1 /* RemoteCommandsTests.swift in Sources */,
+				586A67B121E4650B002737E1 /* RemoteCommandBuilderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1099,28 +1220,37 @@
 		};
 		0692843A1BE5BF5C00AF4678 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1945B0BCA960968625FE55AE /* Pods-RemoteCamTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = RemoteCamTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackfireapps.RemoteCamTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RemoteCamTests/RemoteCamTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RemoteCam.app/RemoteCam";
 			};
 			name = Debug;
 		};
 		0692843B1BE5BF5C00AF4678 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A5377947BACAE324BB4B650 /* Pods-RemoteCamTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = RemoteCamTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackfireapps.RemoteCamTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RemoteCamTests/RemoteCamTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RemoteCam.app/RemoteCam";
 			};
 			name = Release;

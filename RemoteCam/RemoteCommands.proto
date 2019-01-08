@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+message RemoteShutterEnvelope {
+   enum ContentType {
+       UNKNOWN = 0;
+       TAKE_PIC = 1;
+   }
+    ContentType content_type = 1;
+    string version = 2;
+    TakePic take_pic = 3;
+}
+
+message TakePic {
+
+}
