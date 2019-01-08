@@ -3,13 +3,54 @@ syntax = "proto3";
 message RemoteShutterEnvelope {
    enum ContentType {
        UNKNOWN = 0;
+       
        TAKE_PIC = 1;
+       TAKE_PIC_ACK = 2;
+       TAKE_PIC_RESP = 3;
+       
+       TOGGLE_FLASH = 4;
+       TOGGLE_FLASH_RESP = 5;
+       
+       TOGGLE_CAMERA = 6;
+       TOGGLE_CAMERA_RESP = 7;
+       
+       SEND_FRAME = 8;
+       
+       PEER_BECAME_CAMERA = 9;
+       PEER_BECAME_MONITOR = 10;
    }
+    
     ContentType content_type = 1;
     string version = 2;
+    
     TakePic take_pic = 3;
+    TakePicAck take_pic_ack = 4;
+    TakePicResp take_pic_resp = 5;
+    
+    ToggleFlash toggle_flash = 6;
+    ToggleFlashResp toggle_flash_resp = 7;
+    
+    ToggleCamera toggle_camera = 8;
+    ToggleCameraResp toggle_camera_resp = 9;
+    
+    SendFrame send_frame = 10;
+    
+    PeerBecameCamera peer_became_camera = 11;
+    PeerBecameMonitor peer_became_monitor = 12;
+
 }
 
-message TakePic {
+message TakePic {}
+message TakePicAck {}
+message TakePicResp {}
 
-}
+message ToggleFlash {}
+message ToggleFlashResp {}
+
+message ToggleCamera {}
+message ToggleCameraResp {}
+
+message SendFrame {}
+
+message PeerBecameCamera {}
+message PeerBecameMonitor {}
