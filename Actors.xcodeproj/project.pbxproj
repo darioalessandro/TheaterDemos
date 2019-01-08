@@ -13,7 +13,6 @@
 		060B1E211BE70CCB00077BCC /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 060B1E1F1BE70CC000077BCC /* AdSupport.framework */; };
 		060B1E251BE710FE00077BCC /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B1E241BE710FE00077BCC /* BaseViewController.swift */; };
 		060B1E261BE7110100077BCC /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B1E241BE710FE00077BCC /* BaseViewController.swift */; };
-		0615C2F71BEE7E3900E494B8 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0615C2F61BEE7E3900E494B8 /* Pods.framework */; };
 		0615C3011BEED2F700E494B8 /* SyncTurnstile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0615C3001BEED2F700E494B8 /* SyncTurnstile.swift */; };
 		0615C3031BEED40F00E494B8 /* TurnstileMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0615C3021BEED40F00E494B8 /* TurnstileMessages.swift */; };
 		06163DFC1BF0E30500561FAF /* PingPong.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06163DFB1BF0E30500561FAF /* PingPong.swift */; };
@@ -104,6 +103,7 @@
 		06EEA7D41BBB7305005787AE /* BLECentralActors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06EEA7D31BBB7305005787AE /* BLECentralActors.swift */; };
 		06EEA7D71BBB7360005787AE /* BLEMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06EEA7D61BBB7360005787AE /* BLEMessages.swift */; };
 		06EEA7DE1BBB8CE2005787AE /* WSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06EEA7DD1BBB8CE2005787AE /* WSViewController.swift */; };
+		586A67A221E42EEE002737E1 /* remote-commands.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A67A121E42EEE002737E1 /* remote-commands.pb.swift */; };
 		91F2378CB8D8F85607989EEF /* Pods_ActorsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F387643C93F7B5C8646D47A2 /* Pods_ActorsTests.framework */; };
 		A2A0B37A0A55DF2E27B9B443 /* Pods_RemoteCam.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E73981FFC950F0C950FDD1 /* Pods_RemoteCam.framework */; };
 		FBBAD9C9C282699F45D2FFDE /* Pods_ActorsDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFB6137800928D81F1A79C6 /* Pods_ActorsDemo.framework */; };
@@ -248,6 +248,7 @@
 		46B360E32D276B7FED08D679 /* Pods-RemoteCam.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RemoteCam.release.xcconfig"; path = "Pods/Target Support Files/Pods-RemoteCam/Pods-RemoteCam.release.xcconfig"; sourceTree = "<group>"; };
 		4C8A9E476AE568C4EF0B56F2 /* Pods-ActorsDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ActorsDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ActorsDemo/Pods-ActorsDemo.release.xcconfig"; sourceTree = "<group>"; };
 		513E00B1656D167B80F3A032 /* Pods-RemoteCam.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RemoteCam.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RemoteCam/Pods-RemoteCam.debug.xcconfig"; sourceTree = "<group>"; };
+		586A67A121E42EEE002737E1 /* remote-commands.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "remote-commands.pb.swift"; sourceTree = "<group>"; };
 		62E73981FFC950F0C950FDD1 /* Pods_RemoteCam.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RemoteCam.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		696C16215ABF6178D2D24ED4 /* Pods_Actors.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Actors.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		766A8C017AE74FE9944AAE3F /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -265,7 +266,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0615C2F71BEE7E3900E494B8 /* Pods.framework in Frameworks */,
 				060B1E201BE70CC000077BCC /* AdSupport.framework in Frameworks */,
 				A2A0B37A0A55DF2E27B9B443 /* Pods_RemoteCam.framework in Frameworks */,
 			);
@@ -429,6 +429,7 @@
 		069284611BE5C1BD00AF4678 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				586A67A121E42EEE002737E1 /* remote-commands.pb.swift */,
 				069284451BE5C0E600AF4678 /* MultipeerMessages.swift */,
 				0684A2D81BE6E9D400F0B238 /* RemoteCamSession */,
 				069284491BE5C0E600AF4678 /* States.swift */,
@@ -690,6 +691,7 @@
 					0692841B1BE5BF5B00AF4678 = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = 9BAHU39A66;
+						ProvisioningStyle = Automatic;
 					};
 					0692842E1BE5BF5C00AF4678 = {
 						CreatedOnToolsVersion = 7.1;
@@ -837,12 +839,14 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-ActorsDemo/Pods-ActorsDemo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/BFGallery/BFGallery.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/Theater/Theater.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BFGallery.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftProtobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Theater.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -877,12 +881,14 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-RemoteCam/Pods-RemoteCam-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/BFGallery/BFGallery.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/Theater/Theater.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BFGallery.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftProtobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Theater.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -899,6 +905,7 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-ActorsTests/Pods-ActorsTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/BFGallery/BFGallery.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/Theater/Theater.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
 				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
@@ -907,6 +914,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BFGallery.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftProtobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Theater.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
@@ -929,6 +937,7 @@
 				0684A2E21BE702BC00F0B238 /* CPSoundManager.m in Sources */,
 				0692841F1BE5BF5B00AF4678 /* AppDelegate.swift in Sources */,
 				0684A2D11BE65A9800F0B238 /* OrientationUtils.swift in Sources */,
+				586A67A221E42EEE002737E1 /* remote-commands.pb.swift in Sources */,
 				0650241A1BEA413900311C8A /* PurchasesRestorer.m in Sources */,
 				0692844F1BE5C0E600AF4678 /* MultipeerMessages.swift in Sources */,
 				069284531BE5C0E600AF4678 /* States.swift in Sources */,
@@ -1044,6 +1053,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_WARN_UNUSED_LABEL = NO;
 				GCC_WARN_UNUSED_PARAMETER = NO;
@@ -1053,6 +1064,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackfireapps.remotecamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "RemoteCam/RemoteCam-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -1066,8 +1078,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_WARN_UNUSED_LABEL = NO;
 				GCC_WARN_UNUSED_PARAMETER = NO;
@@ -1078,6 +1092,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.blackfireapps.remotecamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "8b558639-db8f-430e-b358-6af70e3e2a84";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "RemoteCam/RemoteCam-Bridging-Header.h";
 			};
 			name = Release;
@@ -1231,6 +1246,7 @@
 				INFOPLIST_FILE = Actors/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = dario.Actors;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1252,6 +1268,7 @@
 				INFOPLIST_FILE = Actors/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = dario.Actors;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

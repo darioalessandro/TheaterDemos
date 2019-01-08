@@ -10,20 +10,20 @@ import UIKit
 import Theater
 
 /**
-     Role picker allows the user to select whether the current device want's to be the camera or the monitor.
-    
-    It is important to mention that the session is the actor that coordinates this modes internally.
+ Role picker allows the user to select whether the current device want's to be the camera or the monitor.
  
-    One neat feature is that if two devices are connected and both are in the RolePickerController, when device1 selects a role, say Camera, RemoteCamSession will inform device2 about the choice, so that it becomes the Monitor.
+ It is important to mention that the session is the actor that coordinates this modes internally.
  
-*/
+ One neat feature is that if two devices are connected and both are in the RolePickerController, when device1 selects a role, say Camera, RemoteCamSession will inform device2 about the choice, so that it becomes the Monitor.
+ 
+ */
 
 public class RemoteCamSystem : ActorSystem {
     static let shared = ActorSystem(name: "RemoteCam")
 }
 
 public class RolePickerController : UIViewController {
-
+    
     let showCameraSegue : String = "showCamera"
     
     let showRemoteSegue : String = "showRemote"
@@ -84,7 +84,7 @@ public class RolePickerController : UIViewController {
     public func becomeCamera() {
         self.performSegue(withIdentifier: showCameraSegue, sender: self)
     }
-        
+    
     @objc public func toggleConnect(button : UIButton) {
         self.remoteCamSession ! UICmd.ToggleConnect(sender : nil)
     }

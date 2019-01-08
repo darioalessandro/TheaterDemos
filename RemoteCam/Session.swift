@@ -93,7 +93,7 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
                     })
                 }
                 self.become(name: self.states.connected, state: self.connected(lobby: lobby, peer: w.peer))
-                self.mcAdvertiserAssistant.stop()
+                ^{self.mcAdvertiserAssistant.stop()}
                 
             case is Disconnect:
                 self.this ! BLECentral.StartScanning(services: nil, sender: self.this)

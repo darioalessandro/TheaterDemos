@@ -55,7 +55,7 @@ public class UICmd {
     public class UnbecomeMonitor : Actor.Message {}
     
     public class BecomeMonitor : Actor.Message {}
-
+    
     public class BecomeCamera : Actor.Message {
         let ctrl : CameraViewController
         
@@ -147,12 +147,12 @@ public class UICmd {
         public let camPosition : AVCaptureDevicePosition?
         
         public init(flashMode : AVCaptureFlashMode?,
-            camPosition : AVCaptureDevicePosition?,
-            error : Error?) {
-                self.flashMode = flashMode
-                self.camPosition = camPosition
-                self.error = error
-                super.init(sender : nil)
+                    camPosition : AVCaptureDevicePosition?,
+                    error : Error?) {
+            self.flashMode = flashMode
+            self.camPosition = camPosition
+            self.error = error
+            super.init(sender : nil)
         }
         
         public func encode(with aCoder: NSCoder) {
@@ -403,8 +403,8 @@ public class RemoteCmd : Actor.Message {
         public let camPosition : AVCaptureDevicePosition?
         
         public init(flashMode : AVCaptureFlashMode?,
-            camPosition : AVCaptureDevicePosition?,
-            error : Error?) {
+                    camPosition : AVCaptureDevicePosition?,
+                    error : Error?) {
             self.flashMode = flashMode
             self.camPosition = camPosition
             self.error = error
@@ -434,7 +434,7 @@ public class RemoteCmd : Actor.Message {
             } else {
                 self.flashMode = AVCaptureFlashMode(rawValue: aDecoder.decodeInteger(forKey: "flashMode"))
                 self.camPosition = AVCaptureDevicePosition(rawValue: aDecoder.decodeInteger(forKey: "camPosition"))
-
+                
             }
             
             

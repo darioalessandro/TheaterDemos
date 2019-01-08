@@ -6,7 +6,9 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-
+def protobuf
+    pod 'SwiftProtobuf', '~> 1.0'
+end
 
 def gallery
     pod 'BFGallery' , :git => "https://github.com/darioalessandro/BlackFireGallery.git", :tag => "0.1.5"
@@ -21,19 +23,23 @@ target 'ActorsDemo' do
     pod 'Starscream', '~> 3.0.6'
     pod 'Theater', '~> 0.9.1'
     gallery
+    protobuf
 end
 
 target 'RemoteCam' do
-    gallery    
     pod 'Starscream', '~> 3.0.6'
     pod 'Theater', '~> 0.9.1'
+    pod 'SwiftProtobuf', '~> 1.0'
+    gallery
+    protobuf
 end
 
 target 'ActorsTests' do
     pod 'Starscream', '~> 3.0.6'
     pod 'Theater', '~> 0.9.1'
     testing_pods
-    gallery    
+    gallery
+    protobuf
 end
 
 
