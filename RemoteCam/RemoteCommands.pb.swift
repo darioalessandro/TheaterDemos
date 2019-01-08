@@ -19,6 +19,100 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
+struct RemoteShutterTypes {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  enum AVCaptureDevicePosition: SwiftProtobuf.Enum {
+    typealias RawValue = Int
+    case unspecified // = 0
+    case back // = 1
+    case front // = 2
+    case UNRECOGNIZED(Int)
+
+    init() {
+      self = .unspecified
+    }
+
+    init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .unspecified
+      case 1: self = .back
+      case 2: self = .front
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    var rawValue: Int {
+      switch self {
+      case .unspecified: return 0
+      case .back: return 1
+      case .front: return 2
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+  }
+
+  enum AVCaptureFlashMode: SwiftProtobuf.Enum {
+    typealias RawValue = Int
+    case off // = 0
+    case on // = 1
+    case auto // = 2
+    case UNRECOGNIZED(Int)
+
+    init() {
+      self = .off
+    }
+
+    init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .off
+      case 1: self = .on
+      case 2: self = .auto
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    var rawValue: Int {
+      switch self {
+      case .off: return 0
+      case .on: return 1
+      case .auto: return 2
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+  }
+
+  init() {}
+}
+
+#if swift(>=4.2)
+
+extension RemoteShutterTypes.AVCaptureDevicePosition: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  static var allCases: [RemoteShutterTypes.AVCaptureDevicePosition] = [
+    .unspecified,
+    .back,
+    .front,
+  ]
+}
+
+extension RemoteShutterTypes.AVCaptureFlashMode: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  static var allCases: [RemoteShutterTypes.AVCaptureFlashMode] = [
+    .off,
+    .on,
+    .auto,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
 struct RemoteShutterEnvelope {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -212,6 +306,10 @@ struct TakePic {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  var success: Bool = false
+
+  var error: String = String()
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
@@ -221,6 +319,10 @@ struct TakePicAck {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
+
+  var success: Bool = false
+
+  var error: String = String()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -232,6 +334,12 @@ struct TakePicResp {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  var success: Bool = false
+
+  var error: String = String()
+
+  var pic: Data = SwiftProtobuf.Internal.emptyData
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
@@ -241,6 +349,10 @@ struct ToggleFlash {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
+
+  var success: Bool = false
+
+  var error: String = String()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -252,6 +364,10 @@ struct ToggleFlashResp {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  var success: Bool = false
+
+  var error: String = String()
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
@@ -261,6 +377,10 @@ struct ToggleCamera {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
+
+  var success: Bool = false
+
+  var error: String = String()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -272,6 +392,14 @@ struct ToggleCameraResp {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  var success: Bool = false
+
+  var error: String = String()
+
+  var flashMode: RemoteShutterTypes.AVCaptureFlashMode = .off
+
+  var camPosition: RemoteShutterTypes.AVCaptureDevicePosition = .unspecified
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
@@ -281,6 +409,16 @@ struct SendFrame {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
+
+  var success: Bool = false
+
+  var error: String = String()
+
+  var data: Data = SwiftProtobuf.Internal.emptyData
+
+  var fps: Int64 = 0
+
+  var camPosition: RemoteShutterTypes.AVCaptureDevicePosition = .unspecified
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -292,6 +430,10 @@ struct PeerBecameCamera {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  var success: Bool = false
+
+  var error: String = String()
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
@@ -302,12 +444,51 @@ struct PeerBecameMonitor {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  var success: Bool = false
+
+  var error: String = String()
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
+
+extension RemoteShutterTypes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = "RemoteShutterTypes"
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let _ = try decoder.nextFieldNumber() {
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: RemoteShutterTypes, rhs: RemoteShutterTypes) -> Bool {
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension RemoteShutterTypes.AVCaptureDevicePosition: SwiftProtobuf._ProtoNameProviding {
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "UNSPECIFIED"),
+    1: .same(proto: "BACK"),
+    2: .same(proto: "FRONT"),
+  ]
+}
+
+extension RemoteShutterTypes.AVCaptureFlashMode: SwiftProtobuf._ProtoNameProviding {
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "OFF"),
+    1: .same(proto: "ON"),
+    2: .same(proto: "AUTO"),
+  ]
+}
 
 extension RemoteShutterEnvelope: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = "RemoteShutterEnvelope"
@@ -476,18 +657,34 @@ extension RemoteShutterEnvelope.ContentType: SwiftProtobuf._ProtoNameProviding {
 
 extension TakePic: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = "TakePic"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "success"),
+    2: .same(proto: "error"),
+  ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let _ = try decoder.nextFieldNumber() {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularBoolField(value: &self.success)
+      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      default: break
+      }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: TakePic, rhs: TakePic) -> Bool {
+    if lhs.success != rhs.success {return false}
+    if lhs.error != rhs.error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -495,18 +692,34 @@ extension TakePic: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
 
 extension TakePicAck: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = "TakePicAck"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "success"),
+    2: .same(proto: "error"),
+  ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let _ = try decoder.nextFieldNumber() {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularBoolField(value: &self.success)
+      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      default: break
+      }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: TakePicAck, rhs: TakePicAck) -> Bool {
+    if lhs.success != rhs.success {return false}
+    if lhs.error != rhs.error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -514,18 +727,40 @@ extension TakePicAck: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
 
 extension TakePicResp: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = "TakePicResp"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "success"),
+    2: .same(proto: "error"),
+    3: .same(proto: "pic"),
+  ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let _ = try decoder.nextFieldNumber() {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularBoolField(value: &self.success)
+      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      case 3: try decoder.decodeSingularBytesField(value: &self.pic)
+      default: break
+      }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    }
+    if !self.pic.isEmpty {
+      try visitor.visitSingularBytesField(value: self.pic, fieldNumber: 3)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: TakePicResp, rhs: TakePicResp) -> Bool {
+    if lhs.success != rhs.success {return false}
+    if lhs.error != rhs.error {return false}
+    if lhs.pic != rhs.pic {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -533,18 +768,34 @@ extension TakePicResp: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
 
 extension ToggleFlash: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = "ToggleFlash"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "success"),
+    2: .same(proto: "error"),
+  ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let _ = try decoder.nextFieldNumber() {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularBoolField(value: &self.success)
+      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      default: break
+      }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: ToggleFlash, rhs: ToggleFlash) -> Bool {
+    if lhs.success != rhs.success {return false}
+    if lhs.error != rhs.error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -552,18 +803,34 @@ extension ToggleFlash: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
 
 extension ToggleFlashResp: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = "ToggleFlashResp"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "success"),
+    2: .same(proto: "error"),
+  ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let _ = try decoder.nextFieldNumber() {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularBoolField(value: &self.success)
+      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      default: break
+      }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: ToggleFlashResp, rhs: ToggleFlashResp) -> Bool {
+    if lhs.success != rhs.success {return false}
+    if lhs.error != rhs.error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -571,18 +838,34 @@ extension ToggleFlashResp: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
 
 extension ToggleCamera: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = "ToggleCamera"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "success"),
+    2: .same(proto: "error"),
+  ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let _ = try decoder.nextFieldNumber() {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularBoolField(value: &self.success)
+      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      default: break
+      }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: ToggleCamera, rhs: ToggleCamera) -> Bool {
+    if lhs.success != rhs.success {return false}
+    if lhs.error != rhs.error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -590,18 +873,46 @@ extension ToggleCamera: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
 
 extension ToggleCameraResp: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = "ToggleCameraResp"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "success"),
+    2: .same(proto: "error"),
+    3: .standard(proto: "flash_mode"),
+    4: .standard(proto: "cam_position"),
+  ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let _ = try decoder.nextFieldNumber() {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularBoolField(value: &self.success)
+      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      case 3: try decoder.decodeSingularEnumField(value: &self.flashMode)
+      case 4: try decoder.decodeSingularEnumField(value: &self.camPosition)
+      default: break
+      }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    }
+    if self.flashMode != .off {
+      try visitor.visitSingularEnumField(value: self.flashMode, fieldNumber: 3)
+    }
+    if self.camPosition != .unspecified {
+      try visitor.visitSingularEnumField(value: self.camPosition, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: ToggleCameraResp, rhs: ToggleCameraResp) -> Bool {
+    if lhs.success != rhs.success {return false}
+    if lhs.error != rhs.error {return false}
+    if lhs.flashMode != rhs.flashMode {return false}
+    if lhs.camPosition != rhs.camPosition {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -609,18 +920,52 @@ extension ToggleCameraResp: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 
 extension SendFrame: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = "SendFrame"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "success"),
+    2: .same(proto: "error"),
+    3: .same(proto: "data"),
+    4: .same(proto: "fps"),
+    5: .standard(proto: "cam_position"),
+  ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let _ = try decoder.nextFieldNumber() {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularBoolField(value: &self.success)
+      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      case 3: try decoder.decodeSingularBytesField(value: &self.data)
+      case 4: try decoder.decodeSingularInt64Field(value: &self.fps)
+      case 5: try decoder.decodeSingularEnumField(value: &self.camPosition)
+      default: break
+      }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    }
+    if !self.data.isEmpty {
+      try visitor.visitSingularBytesField(value: self.data, fieldNumber: 3)
+    }
+    if self.fps != 0 {
+      try visitor.visitSingularInt64Field(value: self.fps, fieldNumber: 4)
+    }
+    if self.camPosition != .unspecified {
+      try visitor.visitSingularEnumField(value: self.camPosition, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: SendFrame, rhs: SendFrame) -> Bool {
+    if lhs.success != rhs.success {return false}
+    if lhs.error != rhs.error {return false}
+    if lhs.data != rhs.data {return false}
+    if lhs.fps != rhs.fps {return false}
+    if lhs.camPosition != rhs.camPosition {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -628,18 +973,34 @@ extension SendFrame: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementation
 
 extension PeerBecameCamera: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = "PeerBecameCamera"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "success"),
+    2: .same(proto: "error"),
+  ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let _ = try decoder.nextFieldNumber() {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularBoolField(value: &self.success)
+      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      default: break
+      }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: PeerBecameCamera, rhs: PeerBecameCamera) -> Bool {
+    if lhs.success != rhs.success {return false}
+    if lhs.error != rhs.error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -647,18 +1008,34 @@ extension PeerBecameCamera: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 
 extension PeerBecameMonitor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = "PeerBecameMonitor"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "success"),
+    2: .same(proto: "error"),
+  ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let _ = try decoder.nextFieldNumber() {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      switch fieldNumber {
+      case 1: try decoder.decodeSingularBoolField(value: &self.success)
+      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      default: break
+      }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.success != false {
+      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    }
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: PeerBecameMonitor, rhs: PeerBecameMonitor) -> Bool {
+    if lhs.success != rhs.success {return false}
+    if lhs.error != rhs.error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

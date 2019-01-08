@@ -1,5 +1,19 @@
 syntax = "proto3";
 
+message RemoteShutterTypes {
+    enum AVCaptureDevicePosition {
+        UNSPECIFIED = 0;
+        BACK = 1;
+        FRONT = 2;
+    }
+    
+    enum AVCaptureFlashMode {
+        OFF = 0;
+        ON = 1;
+        AUTO = 2;
+    }
+}
+
 message RemoteShutterEnvelope {
    enum ContentType {
        UNKNOWN = 0;
@@ -40,17 +54,55 @@ message RemoteShutterEnvelope {
 
 }
 
-message TakePic {}
-message TakePicAck {}
-message TakePicResp {}
+message TakePic {
+    bool success = 1;
+    string error = 2;
+}
+message TakePicAck {
+    bool success = 1;
+    string error = 2;
+}
+message TakePicResp {
+    bool success = 1;
+    string error = 2;
+    bytes pic = 3;
+}
 
-message ToggleFlash {}
-message ToggleFlashResp {}
+message ToggleFlash {
+    bool success = 1;
+    string error = 2;
+}
 
-message ToggleCamera {}
-message ToggleCameraResp {}
+message ToggleFlashResp {
+    bool success = 1;
+    string error = 2;
+}
 
-message SendFrame {}
+message ToggleCamera {
+    bool success = 1;
+    string error = 2;
+}
 
-message PeerBecameCamera {}
-message PeerBecameMonitor {}
+message ToggleCameraResp {
+    bool success = 1;
+    string error = 2;
+    RemoteShutterTypes.AVCaptureFlashMode flash_mode = 3;
+    RemoteShutterTypes.AVCaptureDevicePosition cam_position = 4;
+}
+
+message SendFrame {
+    bool success = 1;
+    string error = 2;
+    bytes data = 3;
+    int64 fps = 4;
+    RemoteShutterTypes.AVCaptureDevicePosition cam_position = 5;
+}
+
+message PeerBecameCamera {
+    bool success = 1;
+    string error = 2;
+}
+message PeerBecameMonitor {
+    bool success = 1;
+    string error = 2;
+}
