@@ -109,6 +109,8 @@
 		586A67AD21E461F0002737E1 /* RemoteCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A67AC21E461F0002737E1 /* RemoteCommandBuilder.swift */; };
 		586A67AE21E461F0002737E1 /* RemoteCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A67AC21E461F0002737E1 /* RemoteCommandBuilder.swift */; };
 		586A67B121E4650B002737E1 /* RemoteCommandBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A67AF21E4650B002737E1 /* RemoteCommandBuilderTests.swift */; };
+		58BB341621E5DA6E0091C9BC /* RemoteCommands.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A67A621E45C38002737E1 /* RemoteCommands.pb.swift */; };
+		58BB341721E5DA790091C9BC /* RemoteCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A67AC21E461F0002737E1 /* RemoteCommandBuilder.swift */; };
 		91F2378CB8D8F85607989EEF /* Pods_ActorsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F387643C93F7B5C8646D47A2 /* Pods_ActorsTests.framework */; };
 		A2A0B37A0A55DF2E27B9B443 /* Pods_RemoteCam.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E73981FFC950F0C950FDD1 /* Pods_RemoteCam.framework */; };
 		B50CD1B50737F384FACC5EB6 /* Pods_RemoteCamTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01CBFB43C3E1F958455B7527 /* Pods_RemoteCamTests.framework */; };
@@ -1112,12 +1114,14 @@
 				066427761BE924E9003EDD41 /* EnumExtensions.swift in Sources */,
 				0624C0421BE861C6001CC738 /* CameraAccess.swift in Sources */,
 				0692845F1BE5C18E00AF4678 /* UIImage+ImageProcessing.m in Sources */,
+				58BB341721E5DA790091C9BC /* RemoteCommandBuilder.swift in Sources */,
 				0615C3031BEED40F00E494B8 /* TurnstileMessages.swift in Sources */,
 				06163DFF1BF0E8A800561FAF /* GreetingActor.swift in Sources */,
 				069468111BC45D3D00C84503 /* Bank.swift in Sources */,
 				06EEA7D71BBB7360005787AE /* BLEMessages.swift in Sources */,
 				0684A2D61BE6E9A600F0B238 /* MonitorStates.swift in Sources */,
 				0692845C1BE5C18E00AF4678 /* Session.swift in Sources */,
+				58BB341621E5DA6E0091C9BC /* RemoteCommands.pb.swift in Sources */,
 				0615C3011BEED2F700E494B8 /* SyncTurnstile.swift in Sources */,
 				0693BC851BC3405100694512 /* AccountsViewController.swift in Sources */,
 				060B1E261BE7110100077BCC /* BaseViewController.swift in Sources */,

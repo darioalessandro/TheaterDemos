@@ -37,45 +37,45 @@ public class Account : Actor {
     
     public override func receive(msg: Message) {
         switch msg {
-            case let w as SetAccountNumber:
-                self.number = w.accountNumber
-                print("account number \(self.number)")
-                break
+        case let w as SetAccountNumber:
+            self.number = w.accountNumber
+            print("account number \(self.number)")
+            break
             
-            case let w as Withdraw:
-                let op = self.withdraw(amount: w.ammount)
-                if let sender = self.sender {
-                    self.scheduleOnce(seconds: delay(),block: { () in
-                        sender ! WithdrawResult(sender: self.this, operationId: w.operationId, result: op)
-                    })
-                }
-                break
+        case let w as Withdraw:
+            let op = self.withdraw(amount: w.ammount)
+            if let sender = self.sender {
+                self.scheduleOnce(seconds: delay(),block: { () in
+                    sender ! WithdrawResult(sender: self.this, operationId: w.operationId, result: op)
+                })
+            }
+            break
             
-            case let w as Deposit:
-                let r = self.deposit(amount: w.ammount)
-                if let sender = self.sender {
-                    self.scheduleOnce(seconds: delay(),block: { () in
-                        sender ! DepositResult(sender: self.this, operationId: w.operationId, result: r)
-                    })
-                }
-                break
+        case let w as Deposit:
+            let r = self.deposit(amount: w.ammount)
+            if let sender = self.sender {
+                self.scheduleOnce(seconds: delay(),block: { () in
+                    sender ! DepositResult(sender: self.this, operationId: w.operationId, result: r)
+                })
+            }
+            break
             
-            case is PrintBalance:
-                print("Balance of \(number) is \(balance().get())")
-                break
+        case is PrintBalance:
+            print("Balance of \(number) is \(balance().get())")
+            break
             
-            case let w as WithdrawResult:
-                if let ammount = w.result.toOptional() {
-                    self.deposit(amount: ammount)
-                }
-                break
+        case let w as WithdrawResult:
+            if let ammount = w.result.toOptional() {
+                self.deposit(amount: ammount)
+            }
+            break
             
-            case let w as BankOpResult:
-                print("Account \(number) : \(w.operationId.uuidString) \(w.result.description)")
-                break
+        case let w as BankOpResult:
+            print("Account \(number) : \(w.operationId.uuidString) \(w.result.description)")
+            break
             
-            default:
-                print("Unable to handle Actor.Message")
+        default:
+            print("Unable to handle Actor.Message")
         }
     }
     

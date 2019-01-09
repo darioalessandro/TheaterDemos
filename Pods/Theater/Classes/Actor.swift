@@ -279,7 +279,9 @@ open class Actor : NSObject {
      */
     
     final public func scheduleOnce(seconds:Double, block : @escaping () -> Void) {
-        self.mailbox.underlyingQueue!.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: UInt64(seconds)), execute: block)
+        if let q = self.mailbox.underlyingQueue {
+            q.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: UInt64(seconds)), execute: block)
+        }
     }
     
     /**

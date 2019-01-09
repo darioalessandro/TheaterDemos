@@ -33,11 +33,6 @@
         [self.navigationController setNavigationBarHidden:TRUE];
 }
 
-- (void)viewDidUnload{
-    [self setTableView:nil];
-    [super viewDidUnload];
-}
-
 -(void)reloadData:(NSNotification *)notif{
     [self.tableView reloadData];
 }

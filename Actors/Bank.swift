@@ -73,8 +73,7 @@ public class Bank : ViewCtrlActor<AccountsViewController> {
             
             if w.result.isFailure() { ^{
                     let v = self.transfers[uuid]!
-                    UIAlertView(title: "Transaction error from:\(v.0.origin.path.asString) to:\(v.0.destination.path.asString)", message: "\(w.result.description)", delegate: nil, cancelButtonTitle: "ok").show()
-                }
+                    UIAlertController(title: "Transaction error from:\(v.0.origin.path.asString) to:\(v.0.destination.path.asString)", message: "\(w.result.description)", preferredStyle: .alert).show(ctrl, sender: nil)                }
             }
             
             self.stop(actorRef: w.sender!)
