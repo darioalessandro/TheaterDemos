@@ -102,6 +102,7 @@ message PeerBecameCamera {
     bool success = 1;
     string error = 2;
 }
+
 message PeerBecameMonitor {
     bool success = 1;
     string error = 2;

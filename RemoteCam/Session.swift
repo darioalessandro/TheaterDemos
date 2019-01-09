@@ -156,18 +156,29 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
             case let m as UICmd.BecomeMonitor:
                 m.sender! ! UICmd.BecomeMonitorFailed(sender : this)
             
-            case is RemoteCmd.TakePic:
-                let l = RemoteCmd.TakePicResp(sender: this, error: self.unableToProcessError(msg: msg))
-                self.sendMessage(peer: self.session.connectedPeers, msg: l)
-            
-            case is RemoteCmd.ToggleCamera:
-                let l = RemoteCmd.ToggleCameraResp(flashMode: nil, camPosition: nil, error: self.unableToProcessError(msg: msg))
-                self.sendMessage(peer: self.session.connectedPeers, msg: l)
-            
-            case is RemoteCmd.ToggleFlash:
-                let l = RemoteCmd.ToggleFlashResp(flashMode: nil, error: self.unableToProcessError(msg: msg))
-                self.sendMessage(peer: self.session.connectedPeers, msg: l)
-            
+            case let cmd as RemoteCmd.OnRemoteCommand:
+                switch (cmd.cmd) {
+                case is TakePic:
+                    let l = TakePicResp.with {
+                        $0.error = self.unableToProcessError(msg: msg).localizedDescription
+                    }
+                    self.sendMessage(peer: self.session.connectedPeers, msg: l)
+                    
+                case is ToggleCamera:
+                    let l = ToggleCameraResp.with {
+                        $0.error = self.unableToProcessError(msg: msg).localizedDescription
+                    }
+                    self.sendMessage(peer: self.session.connectedPeers, msg: l)
+                    
+                case is ToggleFlash:
+                    let l = ToggleFlashResp.with {
+                        $0.error = self.unableToProcessError(msg: msg).localizedDescription
+                    }
+                    self.sendMessage(peer: self.session.connectedPeers, msg: l)
+                    
+                default:
+                    super.receive(msg: msg)
+                }
             default:
                 super.receive(msg: msg)
         }
@@ -180,12 +191,13 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
             }
         }
     
-    public func sendMessage(peer : [MCPeerID], msg : Actor.Message, mode : MCSessionSendDataMode = .reliable) -> Try<Message> {
+    public func sendMessage(peer : [MCPeerID], msg : Any, mode : MCSessionSendDataMode = .reliable) -> Try<Message> {
         do {
-            try self.session.send(NSKeyedArchiver.archivedData(withRootObject: msg),
+            let serializedMsg = try RemoteCommandBuilder.shared.serialize(payload:msg)
+            try self.session.send(serializedMsg,
                                   toPeers: peer,
                                   with:mode)
-            return Success(value: msg)
+            return Success(value: serializedMsg)
         } catch let error as NSError {
             print("error \(error)")
             return Failure(error: error)

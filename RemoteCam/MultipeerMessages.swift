@@ -199,6 +199,14 @@ public class OnConnectToDevice : Actor.Message {
 
 public class RemoteCmd : Actor.Message {
     
+    public class OnRemoteCommand : Actor.Message {
+        public let cmd : Any
+        init(cmd : Any, sender: Optional<ActorRef>) {
+            self.cmd = cmd
+            super.init(sender: sender)
+        }
+    }
+    
     public class OnFrame : Actor.Message {
         public let data : Data
         public let peerId : MCPeerID
