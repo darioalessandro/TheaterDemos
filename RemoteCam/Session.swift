@@ -44,17 +44,22 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
                 
                 case let m as UICmd.BecomeCamera:
                     self.become(name: self.states.camera, state: self.camera(peer: peer, ctrl: m.ctrl, lobby: lobby))
-                    self.sendMessage(peer: [peer], msg : RemoteCmd.PeerBecameCamera())
+                    self.sendMessage(peer: [peer], msg : PeerBecameCamera())
 
                 case let m as UICmd.BecomeMonitor:
                     self.become(name: self.states.monitor, state:self.monitor(monitor: m.sender!, peer: peer, lobby: lobby))
-                    self.sendMessage(peer: [peer], msg : RemoteCmd.PeerBecameMonitor())
+                    self.sendMessage(peer: [peer], msg : PeerBecameMonitor())
                 
-                case is RemoteCmd.PeerBecameCamera:
+                case let m as RemoteCmd.OnRemoteCommand:
+                switch(m.cmd) {
+                case is PeerBecameCamera:
                     ^{lobby.becomeMonitor()}
                 
-                case is RemoteCmd.PeerBecameMonitor:
+                case is PeerBecameMonitor:
                     ^{lobby.becomeCamera()}
+                default:
+                    self.receive(msg: msg)
+                }
                 
                 case is UICmd.ToggleConnect:
                     self.popAndStartScanning()
@@ -175,7 +180,6 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
                         $0.error = self.unableToProcessError(msg: msg).localizedDescription
                     }
                     self.sendMessage(peer: self.session.connectedPeers, msg: l)
-                    
                 default:
                     super.receive(msg: msg)
                 }
@@ -191,13 +195,13 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
             }
         }
     
-    public func sendMessage(peer : [MCPeerID], msg : Any, mode : MCSessionSendDataMode = .reliable) -> Try<Message> {
+    public func sendMessage(peer : [MCPeerID], msg : Any, mode : MCSessionSendDataMode = .reliable) -> Try<Any> {
         do {
             let serializedMsg = try RemoteCommandBuilder.shared.serialize(payload:msg)
             try self.session.send(serializedMsg,
                                   toPeers: peer,
                                   with:mode)
-            return Success(value: serializedMsg)
+            return Success(value: msg)
         } catch let error as NSError {
             print("error \(error)")
             return Failure(error: error)
@@ -229,19 +233,31 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
     
     }
     
-    public func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        
-        switch (NSKeyedUnarchiver.unarchiveObject(with: data)) {
-            case let frame as RemoteCmd.SendFrame:
-                this ! RemoteCmd.OnFrame(data: frame.data, sender: nil, peerId: peerID, fps: frame.fps, camPosition:  frame.camPosition)
-            
-            case let m as Message:
-                this ! m
-            
-            default:
-                print("unable to unarchive")
+    func map(value: RemoteShutterTypes.AVCaptureDevicePosition) -> AVCaptureDevicePosition {
+        switch(value) {
+        case .back:
+            return AVCaptureDevicePosition.back
+        case .front:
+            return AVCaptureDevicePosition.front
+        case .unspecified:
+            return AVCaptureDevicePosition.unspecified
+        case .UNRECOGNIZED(_):
+            return AVCaptureDevicePosition.unspecified
         }
-        
+    }
+    
+    public func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
+        do {
+            let remoteCmd = try RemoteCommandBuilder.shared.deserialize(serializedData: data)
+            switch (remoteCmd) {
+                case let frame as SendFrame:
+                    this ! RemoteCmd.OnFrame(data: frame.data, sender: nil, peerId: peerID, fps: NSInteger(frame.fps), camPosition: self.map(value:frame.camPosition))
+                default:
+                    this ! RemoteCmd.OnRemoteCommand.init(cmd: remoteCmd, sender: this)
+            }
+        } catch let error as NSError {
+            print("error \(error)")
+        }
     }
     
     public func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
