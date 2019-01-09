@@ -23,12 +23,16 @@ extension RemoteCamSession {
                     
                 case is UICmd.ToggleFlash:
                     ^{lobby.present(alert, animated: true, completion: {
-                        if let f = self.sendMessage(peer: [peer], msg: RemoteCmd.ToggleFlash()) as? Failure {
-                            self.this ! RemoteCmd.ToggleFlashResp(flashMode: nil, error: f.error)
+                        if let f = self.sendMessage(peer: [peer], msg: ToggleFlash()) as? Failure {
+                            self.this ! RemoteCmd.OnRemoteCommand(cmd:ToggleFlashResp.with {
+                                $0.error = (f.error?.localizedDescription)!
+                            }, sender: nil)
                         }
                     })}
                     
-                case let t as RemoteCmd.ToggleFlashResp:
+                case let m as RemoteCmd.OnRemoteCommand:
+                    switch(m.cmd) {
+                    case let t as ToggleFlashResp:
                     monitor ! UICmd.ToggleFlashResp(flashMode: t.flashMode, error: t.error)
                     if let _ = t.flashMode {
                         monitor ! t
@@ -43,6 +47,9 @@ extension RemoteCamSession {
                             
                             lobby.present(a, animated: true, completion: nil)
                         })}
+                    }
+                    default:
+                        print("message unhandled")
                     }
                     self.unbecome()
                     
@@ -128,32 +135,36 @@ extension RemoteCamSession {
                 preferredStyle: .alert)
             return {[unowned self] (msg : Actor.Message) in
                 switch(msg) {
-                    
-                case is RemoteCmd.TakePicAck:
-                    ^{alert.title = "Receiving picture"}
-                    self.sendMessage(peer: [peer], msg: msg)
+                case let m as RemoteCmd.OnRemoteCommand:
+                    switch (m.cmd) {
+                    case is TakePicAck:
+                        ^{alert.title = "Receiving picture"}
+                        self.sendMessage(peer: [peer], msg: m.cmd)
+                        
+                    case let picResp as TakePicResp:
+                        if let imageData = picResp.pic, let image = UIImage(data: imageData) {
+                            UIImageWriteToSavedPhotosAlbum(image, self, Selector("image:didFinishSavingWithError:contextInfo:"), nil)
+                            ^{alert.dismiss(animated: true, completion: nil)}
+                        }else if let error = picResp.error {
+                            ^{alert.dismiss(animated: true, completion:{ () in
+                                let a = UIAlertController(title: error._domain, message: nil, preferredStyle: .alert)
+                                
+                                a.addAction(UIAlertAction(title: "Ok", style: .cancel) { (action) in
+                                    a.dismiss(animated: true, completion: nil)
+                                })
+                                
+                                lobby.present(a, animated: true, completion: nil)
+                            })}
+                        }
+                        self.unbecome()
+                    default:
+                        print("error")
+                    }
                     
                 case is UICmd.TakePicture:
                     ^{lobby.present(alert, animated: true, completion: {
                         self.sendMessage(peer: [peer], msg: RemoteCmd.TakePic(sender: self.this))
                     })}
-                    
-                case let picResp as RemoteCmd.TakePicResp:
-                    if let imageData = picResp.pic, let image = UIImage(data: imageData) {
-                        UIImageWriteToSavedPhotosAlbum(image, self, Selector("image:didFinishSavingWithError:contextInfo:"), nil)
-                        ^{alert.dismiss(animated: true, completion: nil)}
-                    }else if let error = picResp.error {
-                        ^{alert.dismiss(animated: true, completion:{ () in
-                            let a = UIAlertController(title: error._domain, message: nil, preferredStyle: .alert)
-                            
-                            a.addAction(UIAlertAction(title: "Ok", style: .cancel) { (action) in
-                                a.dismiss(animated: true, completion: nil)
-                                })
-                            
-                            lobby.present(a, animated: true, completion: nil)
-                        })}
-                    }
-                    self.unbecome()
                     
                 case is UICmd.UnbecomeMonitor:
                     ^{alert.dismiss(animated: true, completion: nil)}
@@ -171,7 +182,7 @@ extension RemoteCamSession {
                     
                 default:
                     ^{alert.dismiss(animated: true, completion: nil)}
-                    print("sdfsdf")
+                    print("error")
                 }
             }
     }

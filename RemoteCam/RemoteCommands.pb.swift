@@ -31,7 +31,6 @@ struct RemoteShutterTypes {
     case unspecified // = 0
     case back // = 1
     case front // = 2
-    case UNRECOGNIZED(Int)
 
     init() {
       self = .unspecified
@@ -42,7 +41,7 @@ struct RemoteShutterTypes {
       case 0: self = .unspecified
       case 1: self = .back
       case 2: self = .front
-      default: self = .UNRECOGNIZED(rawValue)
+      default: return nil
       }
     }
 
@@ -51,7 +50,6 @@ struct RemoteShutterTypes {
       case .unspecified: return 0
       case .back: return 1
       case .front: return 2
-      case .UNRECOGNIZED(let i): return i
       }
     }
 
@@ -62,7 +60,6 @@ struct RemoteShutterTypes {
     case off // = 0
     case on // = 1
     case auto // = 2
-    case UNRECOGNIZED(Int)
 
     init() {
       self = .off
@@ -73,7 +70,7 @@ struct RemoteShutterTypes {
       case 0: self = .off
       case 1: self = .on
       case 2: self = .auto
-      default: self = .UNRECOGNIZED(rawValue)
+      default: return nil
       }
     }
 
@@ -82,7 +79,6 @@ struct RemoteShutterTypes {
       case .off: return 0
       case .on: return 1
       case .auto: return 2
-      case .UNRECOGNIZED(let i): return i
       }
     }
 
@@ -94,21 +90,11 @@ struct RemoteShutterTypes {
 #if swift(>=4.2)
 
 extension RemoteShutterTypes.AVCaptureDevicePosition: CaseIterable {
-  // The compiler won't synthesize support with the UNRECOGNIZED case.
-  static var allCases: [RemoteShutterTypes.AVCaptureDevicePosition] = [
-    .unspecified,
-    .back,
-    .front,
-  ]
+  // Support synthesized by the compiler.
 }
 
 extension RemoteShutterTypes.AVCaptureFlashMode: CaseIterable {
-  // The compiler won't synthesize support with the UNRECOGNIZED case.
-  static var allCases: [RemoteShutterTypes.AVCaptureFlashMode] = [
-    .off,
-    .on,
-    .auto,
-  ]
+  // Support synthesized by the compiler.
 }
 
 #endif  // swift(>=4.2)
@@ -119,14 +105,22 @@ struct RemoteShutterEnvelope {
   // methods supported on all messages.
 
   var contentType: RemoteShutterEnvelope.ContentType {
-    get {return _storage._contentType}
+    get {return _storage._contentType ?? .unknown}
     set {_uniqueStorage()._contentType = newValue}
   }
+  /// Returns true if `contentType` has been explicitly set.
+  var hasContentType: Bool {return _storage._contentType != nil}
+  /// Clears the value of `contentType`. Subsequent reads from it will return its default value.
+  mutating func clearContentType() {_uniqueStorage()._contentType = nil}
 
   var version: String {
-    get {return _storage._version}
+    get {return _storage._version ?? String()}
     set {_uniqueStorage()._version = newValue}
   }
+  /// Returns true if `version` has been explicitly set.
+  var hasVersion: Bool {return _storage._version != nil}
+  /// Clears the value of `version`. Subsequent reads from it will return its default value.
+  mutating func clearVersion() {_uniqueStorage()._version = nil}
 
   var takePic: TakePic {
     get {return _storage._takePic ?? TakePic()}
@@ -233,7 +227,6 @@ struct RemoteShutterEnvelope {
     case sendFrame // = 8
     case peerBecameCamera // = 9
     case peerBecameMonitor // = 10
-    case UNRECOGNIZED(Int)
 
     init() {
       self = .unknown
@@ -252,7 +245,7 @@ struct RemoteShutterEnvelope {
       case 8: self = .sendFrame
       case 9: self = .peerBecameCamera
       case 10: self = .peerBecameMonitor
-      default: self = .UNRECOGNIZED(rawValue)
+      default: return nil
       }
     }
 
@@ -269,7 +262,6 @@ struct RemoteShutterEnvelope {
       case .sendFrame: return 8
       case .peerBecameCamera: return 9
       case .peerBecameMonitor: return 10
-      case .UNRECOGNIZED(let i): return i
       }
     }
 
@@ -283,20 +275,7 @@ struct RemoteShutterEnvelope {
 #if swift(>=4.2)
 
 extension RemoteShutterEnvelope.ContentType: CaseIterable {
-  // The compiler won't synthesize support with the UNRECOGNIZED case.
-  static var allCases: [RemoteShutterEnvelope.ContentType] = [
-    .unknown,
-    .takePic,
-    .takePicAck,
-    .takePicResp,
-    .toggleFlash,
-    .toggleFlashResp,
-    .toggleCamera,
-    .toggleCameraResp,
-    .sendFrame,
-    .peerBecameCamera,
-    .peerBecameMonitor,
-  ]
+  // Support synthesized by the compiler.
 }
 
 #endif  // swift(>=4.2)
@@ -306,13 +285,30 @@ struct TakePic {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var success: Bool = false
+  var success: Bool {
+    get {return _success ?? false}
+    set {_success = newValue}
+  }
+  /// Returns true if `success` has been explicitly set.
+  var hasSuccess: Bool {return self._success != nil}
+  /// Clears the value of `success`. Subsequent reads from it will return its default value.
+  mutating func clearSuccess() {self._success = nil}
 
-  var error: String = String()
+  var error: String {
+    get {return _error ?? String()}
+    set {_error = newValue}
+  }
+  /// Returns true if `error` has been explicitly set.
+  var hasError: Bool {return self._error != nil}
+  /// Clears the value of `error`. Subsequent reads from it will return its default value.
+  mutating func clearError() {self._error = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
+
+  fileprivate var _success: Bool? = nil
+  fileprivate var _error: String? = nil
 }
 
 struct TakePicAck {
@@ -320,13 +316,30 @@ struct TakePicAck {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var success: Bool = false
+  var success: Bool {
+    get {return _success ?? false}
+    set {_success = newValue}
+  }
+  /// Returns true if `success` has been explicitly set.
+  var hasSuccess: Bool {return self._success != nil}
+  /// Clears the value of `success`. Subsequent reads from it will return its default value.
+  mutating func clearSuccess() {self._success = nil}
 
-  var error: String = String()
+  var error: String {
+    get {return _error ?? String()}
+    set {_error = newValue}
+  }
+  /// Returns true if `error` has been explicitly set.
+  var hasError: Bool {return self._error != nil}
+  /// Clears the value of `error`. Subsequent reads from it will return its default value.
+  mutating func clearError() {self._error = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
+
+  fileprivate var _success: Bool? = nil
+  fileprivate var _error: String? = nil
 }
 
 struct TakePicResp {
@@ -334,15 +347,40 @@ struct TakePicResp {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var success: Bool = false
+  var success: Bool {
+    get {return _success ?? false}
+    set {_success = newValue}
+  }
+  /// Returns true if `success` has been explicitly set.
+  var hasSuccess: Bool {return self._success != nil}
+  /// Clears the value of `success`. Subsequent reads from it will return its default value.
+  mutating func clearSuccess() {self._success = nil}
 
-  var error: String = String()
+  var error: String {
+    get {return _error ?? String()}
+    set {_error = newValue}
+  }
+  /// Returns true if `error` has been explicitly set.
+  var hasError: Bool {return self._error != nil}
+  /// Clears the value of `error`. Subsequent reads from it will return its default value.
+  mutating func clearError() {self._error = nil}
 
-  var pic: Data = SwiftProtobuf.Internal.emptyData
+  var pic: Data {
+    get {return _pic ?? SwiftProtobuf.Internal.emptyData}
+    set {_pic = newValue}
+  }
+  /// Returns true if `pic` has been explicitly set.
+  var hasPic: Bool {return self._pic != nil}
+  /// Clears the value of `pic`. Subsequent reads from it will return its default value.
+  mutating func clearPic() {self._pic = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
+
+  fileprivate var _success: Bool? = nil
+  fileprivate var _error: String? = nil
+  fileprivate var _pic: Data? = nil
 }
 
 struct ToggleFlash {
@@ -350,13 +388,30 @@ struct ToggleFlash {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var success: Bool = false
+  var success: Bool {
+    get {return _success ?? false}
+    set {_success = newValue}
+  }
+  /// Returns true if `success` has been explicitly set.
+  var hasSuccess: Bool {return self._success != nil}
+  /// Clears the value of `success`. Subsequent reads from it will return its default value.
+  mutating func clearSuccess() {self._success = nil}
 
-  var error: String = String()
+  var error: String {
+    get {return _error ?? String()}
+    set {_error = newValue}
+  }
+  /// Returns true if `error` has been explicitly set.
+  var hasError: Bool {return self._error != nil}
+  /// Clears the value of `error`. Subsequent reads from it will return its default value.
+  mutating func clearError() {self._error = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
+
+  fileprivate var _success: Bool? = nil
+  fileprivate var _error: String? = nil
 }
 
 struct ToggleFlashResp {
@@ -364,13 +419,40 @@ struct ToggleFlashResp {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var success: Bool = false
+  var success: Bool {
+    get {return _success ?? false}
+    set {_success = newValue}
+  }
+  /// Returns true if `success` has been explicitly set.
+  var hasSuccess: Bool {return self._success != nil}
+  /// Clears the value of `success`. Subsequent reads from it will return its default value.
+  mutating func clearSuccess() {self._success = nil}
 
-  var error: String = String()
+  var error: String {
+    get {return _error ?? String()}
+    set {_error = newValue}
+  }
+  /// Returns true if `error` has been explicitly set.
+  var hasError: Bool {return self._error != nil}
+  /// Clears the value of `error`. Subsequent reads from it will return its default value.
+  mutating func clearError() {self._error = nil}
+
+  var flashMode: RemoteShutterTypes.AVCaptureFlashMode {
+    get {return _flashMode ?? .off}
+    set {_flashMode = newValue}
+  }
+  /// Returns true if `flashMode` has been explicitly set.
+  var hasFlashMode: Bool {return self._flashMode != nil}
+  /// Clears the value of `flashMode`. Subsequent reads from it will return its default value.
+  mutating func clearFlashMode() {self._flashMode = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
+
+  fileprivate var _success: Bool? = nil
+  fileprivate var _error: String? = nil
+  fileprivate var _flashMode: RemoteShutterTypes.AVCaptureFlashMode? = nil
 }
 
 struct ToggleCamera {
@@ -378,13 +460,30 @@ struct ToggleCamera {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var success: Bool = false
+  var success: Bool {
+    get {return _success ?? false}
+    set {_success = newValue}
+  }
+  /// Returns true if `success` has been explicitly set.
+  var hasSuccess: Bool {return self._success != nil}
+  /// Clears the value of `success`. Subsequent reads from it will return its default value.
+  mutating func clearSuccess() {self._success = nil}
 
-  var error: String = String()
+  var error: String {
+    get {return _error ?? String()}
+    set {_error = newValue}
+  }
+  /// Returns true if `error` has been explicitly set.
+  var hasError: Bool {return self._error != nil}
+  /// Clears the value of `error`. Subsequent reads from it will return its default value.
+  mutating func clearError() {self._error = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
+
+  fileprivate var _success: Bool? = nil
+  fileprivate var _error: String? = nil
 }
 
 struct ToggleCameraResp {
@@ -392,17 +491,50 @@ struct ToggleCameraResp {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var success: Bool = false
+  var success: Bool {
+    get {return _success ?? false}
+    set {_success = newValue}
+  }
+  /// Returns true if `success` has been explicitly set.
+  var hasSuccess: Bool {return self._success != nil}
+  /// Clears the value of `success`. Subsequent reads from it will return its default value.
+  mutating func clearSuccess() {self._success = nil}
 
-  var error: String = String()
+  var error: String {
+    get {return _error ?? String()}
+    set {_error = newValue}
+  }
+  /// Returns true if `error` has been explicitly set.
+  var hasError: Bool {return self._error != nil}
+  /// Clears the value of `error`. Subsequent reads from it will return its default value.
+  mutating func clearError() {self._error = nil}
 
-  var flashMode: RemoteShutterTypes.AVCaptureFlashMode = .off
+  var flashMode: RemoteShutterTypes.AVCaptureFlashMode {
+    get {return _flashMode ?? .off}
+    set {_flashMode = newValue}
+  }
+  /// Returns true if `flashMode` has been explicitly set.
+  var hasFlashMode: Bool {return self._flashMode != nil}
+  /// Clears the value of `flashMode`. Subsequent reads from it will return its default value.
+  mutating func clearFlashMode() {self._flashMode = nil}
 
-  var camPosition: RemoteShutterTypes.AVCaptureDevicePosition = .unspecified
+  var camPosition: RemoteShutterTypes.AVCaptureDevicePosition {
+    get {return _camPosition ?? .unspecified}
+    set {_camPosition = newValue}
+  }
+  /// Returns true if `camPosition` has been explicitly set.
+  var hasCamPosition: Bool {return self._camPosition != nil}
+  /// Clears the value of `camPosition`. Subsequent reads from it will return its default value.
+  mutating func clearCamPosition() {self._camPosition = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
+
+  fileprivate var _success: Bool? = nil
+  fileprivate var _error: String? = nil
+  fileprivate var _flashMode: RemoteShutterTypes.AVCaptureFlashMode? = nil
+  fileprivate var _camPosition: RemoteShutterTypes.AVCaptureDevicePosition? = nil
 }
 
 struct SendFrame {
@@ -410,19 +542,60 @@ struct SendFrame {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var success: Bool = false
+  var success: Bool {
+    get {return _success ?? false}
+    set {_success = newValue}
+  }
+  /// Returns true if `success` has been explicitly set.
+  var hasSuccess: Bool {return self._success != nil}
+  /// Clears the value of `success`. Subsequent reads from it will return its default value.
+  mutating func clearSuccess() {self._success = nil}
 
-  var error: String = String()
+  var error: String {
+    get {return _error ?? String()}
+    set {_error = newValue}
+  }
+  /// Returns true if `error` has been explicitly set.
+  var hasError: Bool {return self._error != nil}
+  /// Clears the value of `error`. Subsequent reads from it will return its default value.
+  mutating func clearError() {self._error = nil}
 
-  var data: Data = SwiftProtobuf.Internal.emptyData
+  var data: Data {
+    get {return _data ?? SwiftProtobuf.Internal.emptyData}
+    set {_data = newValue}
+  }
+  /// Returns true if `data` has been explicitly set.
+  var hasData: Bool {return self._data != nil}
+  /// Clears the value of `data`. Subsequent reads from it will return its default value.
+  mutating func clearData() {self._data = nil}
 
-  var fps: Int64 = 0
+  var fps: Int64 {
+    get {return _fps ?? 0}
+    set {_fps = newValue}
+  }
+  /// Returns true if `fps` has been explicitly set.
+  var hasFps: Bool {return self._fps != nil}
+  /// Clears the value of `fps`. Subsequent reads from it will return its default value.
+  mutating func clearFps() {self._fps = nil}
 
-  var camPosition: RemoteShutterTypes.AVCaptureDevicePosition = .unspecified
+  var camPosition: RemoteShutterTypes.AVCaptureDevicePosition {
+    get {return _camPosition ?? .unspecified}
+    set {_camPosition = newValue}
+  }
+  /// Returns true if `camPosition` has been explicitly set.
+  var hasCamPosition: Bool {return self._camPosition != nil}
+  /// Clears the value of `camPosition`. Subsequent reads from it will return its default value.
+  mutating func clearCamPosition() {self._camPosition = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
+
+  fileprivate var _success: Bool? = nil
+  fileprivate var _error: String? = nil
+  fileprivate var _data: Data? = nil
+  fileprivate var _fps: Int64? = nil
+  fileprivate var _camPosition: RemoteShutterTypes.AVCaptureDevicePosition? = nil
 }
 
 struct PeerBecameCamera {
@@ -430,13 +603,30 @@ struct PeerBecameCamera {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var success: Bool = false
+  var success: Bool {
+    get {return _success ?? false}
+    set {_success = newValue}
+  }
+  /// Returns true if `success` has been explicitly set.
+  var hasSuccess: Bool {return self._success != nil}
+  /// Clears the value of `success`. Subsequent reads from it will return its default value.
+  mutating func clearSuccess() {self._success = nil}
 
-  var error: String = String()
+  var error: String {
+    get {return _error ?? String()}
+    set {_error = newValue}
+  }
+  /// Returns true if `error` has been explicitly set.
+  var hasError: Bool {return self._error != nil}
+  /// Clears the value of `error`. Subsequent reads from it will return its default value.
+  mutating func clearError() {self._error = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
+
+  fileprivate var _success: Bool? = nil
+  fileprivate var _error: String? = nil
 }
 
 struct PeerBecameMonitor {
@@ -444,13 +634,30 @@ struct PeerBecameMonitor {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var success: Bool = false
+  var success: Bool {
+    get {return _success ?? false}
+    set {_success = newValue}
+  }
+  /// Returns true if `success` has been explicitly set.
+  var hasSuccess: Bool {return self._success != nil}
+  /// Clears the value of `success`. Subsequent reads from it will return its default value.
+  mutating func clearSuccess() {self._success = nil}
 
-  var error: String = String()
+  var error: String {
+    get {return _error ?? String()}
+    set {_error = newValue}
+  }
+  /// Returns true if `error` has been explicitly set.
+  var hasError: Bool {return self._error != nil}
+  /// Clears the value of `error`. Subsequent reads from it will return its default value.
+  mutating func clearError() {self._error = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
+
+  fileprivate var _success: Bool? = nil
+  fileprivate var _error: String? = nil
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -508,8 +715,8 @@ extension RemoteShutterEnvelope: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   ]
 
   fileprivate class _StorageClass {
-    var _contentType: RemoteShutterEnvelope.ContentType = .unknown
-    var _version: String = String()
+    var _contentType: RemoteShutterEnvelope.ContentType? = nil
+    var _version: String? = nil
     var _takePic: TakePic? = nil
     var _takePicAck: TakePicAck? = nil
     var _takePicResp: TakePicResp? = nil
@@ -573,11 +780,11 @@ extension RemoteShutterEnvelope: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      if _storage._contentType != .unknown {
-        try visitor.visitSingularEnumField(value: _storage._contentType, fieldNumber: 1)
+      if let v = _storage._contentType {
+        try visitor.visitSingularEnumField(value: v, fieldNumber: 1)
       }
-      if !_storage._version.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._version, fieldNumber: 2)
+      if let v = _storage._version {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 2)
       }
       if let v = _storage._takePic {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
@@ -665,26 +872,26 @@ extension TakePic: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      case 1: try decoder.decodeSingularBoolField(value: &self._success)
+      case 2: try decoder.decodeSingularStringField(value: &self._error)
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.success != false {
-      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    if let v = self._success {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 1)
     }
-    if !self.error.isEmpty {
-      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    if let v = self._error {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: TakePic, rhs: TakePic) -> Bool {
-    if lhs.success != rhs.success {return false}
-    if lhs.error != rhs.error {return false}
+    if lhs._success != rhs._success {return false}
+    if lhs._error != rhs._error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -700,26 +907,26 @@ extension TakePicAck: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      case 1: try decoder.decodeSingularBoolField(value: &self._success)
+      case 2: try decoder.decodeSingularStringField(value: &self._error)
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.success != false {
-      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    if let v = self._success {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 1)
     }
-    if !self.error.isEmpty {
-      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    if let v = self._error {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: TakePicAck, rhs: TakePicAck) -> Bool {
-    if lhs.success != rhs.success {return false}
-    if lhs.error != rhs.error {return false}
+    if lhs._success != rhs._success {return false}
+    if lhs._error != rhs._error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -736,31 +943,31 @@ extension TakePicResp: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularStringField(value: &self.error)
-      case 3: try decoder.decodeSingularBytesField(value: &self.pic)
+      case 1: try decoder.decodeSingularBoolField(value: &self._success)
+      case 2: try decoder.decodeSingularStringField(value: &self._error)
+      case 3: try decoder.decodeSingularBytesField(value: &self._pic)
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.success != false {
-      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    if let v = self._success {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 1)
     }
-    if !self.error.isEmpty {
-      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    if let v = self._error {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
     }
-    if !self.pic.isEmpty {
-      try visitor.visitSingularBytesField(value: self.pic, fieldNumber: 3)
+    if let v = self._pic {
+      try visitor.visitSingularBytesField(value: v, fieldNumber: 3)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: TakePicResp, rhs: TakePicResp) -> Bool {
-    if lhs.success != rhs.success {return false}
-    if lhs.error != rhs.error {return false}
-    if lhs.pic != rhs.pic {return false}
+    if lhs._success != rhs._success {return false}
+    if lhs._error != rhs._error {return false}
+    if lhs._pic != rhs._pic {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -776,26 +983,26 @@ extension ToggleFlash: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      case 1: try decoder.decodeSingularBoolField(value: &self._success)
+      case 2: try decoder.decodeSingularStringField(value: &self._error)
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.success != false {
-      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    if let v = self._success {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 1)
     }
-    if !self.error.isEmpty {
-      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    if let v = self._error {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: ToggleFlash, rhs: ToggleFlash) -> Bool {
-    if lhs.success != rhs.success {return false}
-    if lhs.error != rhs.error {return false}
+    if lhs._success != rhs._success {return false}
+    if lhs._error != rhs._error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -806,31 +1013,37 @@ extension ToggleFlashResp: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "success"),
     2: .same(proto: "error"),
+    3: .standard(proto: "flash_mode"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      case 1: try decoder.decodeSingularBoolField(value: &self._success)
+      case 2: try decoder.decodeSingularStringField(value: &self._error)
+      case 3: try decoder.decodeSingularEnumField(value: &self._flashMode)
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.success != false {
-      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    if let v = self._success {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 1)
     }
-    if !self.error.isEmpty {
-      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    if let v = self._error {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
+    }
+    if let v = self._flashMode {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 3)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: ToggleFlashResp, rhs: ToggleFlashResp) -> Bool {
-    if lhs.success != rhs.success {return false}
-    if lhs.error != rhs.error {return false}
+    if lhs._success != rhs._success {return false}
+    if lhs._error != rhs._error {return false}
+    if lhs._flashMode != rhs._flashMode {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -846,26 +1059,26 @@ extension ToggleCamera: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      case 1: try decoder.decodeSingularBoolField(value: &self._success)
+      case 2: try decoder.decodeSingularStringField(value: &self._error)
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.success != false {
-      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    if let v = self._success {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 1)
     }
-    if !self.error.isEmpty {
-      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    if let v = self._error {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: ToggleCamera, rhs: ToggleCamera) -> Bool {
-    if lhs.success != rhs.success {return false}
-    if lhs.error != rhs.error {return false}
+    if lhs._success != rhs._success {return false}
+    if lhs._error != rhs._error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -883,36 +1096,36 @@ extension ToggleCameraResp: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularStringField(value: &self.error)
-      case 3: try decoder.decodeSingularEnumField(value: &self.flashMode)
-      case 4: try decoder.decodeSingularEnumField(value: &self.camPosition)
+      case 1: try decoder.decodeSingularBoolField(value: &self._success)
+      case 2: try decoder.decodeSingularStringField(value: &self._error)
+      case 3: try decoder.decodeSingularEnumField(value: &self._flashMode)
+      case 4: try decoder.decodeSingularEnumField(value: &self._camPosition)
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.success != false {
-      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    if let v = self._success {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 1)
     }
-    if !self.error.isEmpty {
-      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    if let v = self._error {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
     }
-    if self.flashMode != .off {
-      try visitor.visitSingularEnumField(value: self.flashMode, fieldNumber: 3)
+    if let v = self._flashMode {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 3)
     }
-    if self.camPosition != .unspecified {
-      try visitor.visitSingularEnumField(value: self.camPosition, fieldNumber: 4)
+    if let v = self._camPosition {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 4)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: ToggleCameraResp, rhs: ToggleCameraResp) -> Bool {
-    if lhs.success != rhs.success {return false}
-    if lhs.error != rhs.error {return false}
-    if lhs.flashMode != rhs.flashMode {return false}
-    if lhs.camPosition != rhs.camPosition {return false}
+    if lhs._success != rhs._success {return false}
+    if lhs._error != rhs._error {return false}
+    if lhs._flashMode != rhs._flashMode {return false}
+    if lhs._camPosition != rhs._camPosition {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -931,41 +1144,41 @@ extension SendFrame: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementation
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularStringField(value: &self.error)
-      case 3: try decoder.decodeSingularBytesField(value: &self.data)
-      case 4: try decoder.decodeSingularInt64Field(value: &self.fps)
-      case 5: try decoder.decodeSingularEnumField(value: &self.camPosition)
+      case 1: try decoder.decodeSingularBoolField(value: &self._success)
+      case 2: try decoder.decodeSingularStringField(value: &self._error)
+      case 3: try decoder.decodeSingularBytesField(value: &self._data)
+      case 4: try decoder.decodeSingularInt64Field(value: &self._fps)
+      case 5: try decoder.decodeSingularEnumField(value: &self._camPosition)
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.success != false {
-      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    if let v = self._success {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 1)
     }
-    if !self.error.isEmpty {
-      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    if let v = self._error {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
     }
-    if !self.data.isEmpty {
-      try visitor.visitSingularBytesField(value: self.data, fieldNumber: 3)
+    if let v = self._data {
+      try visitor.visitSingularBytesField(value: v, fieldNumber: 3)
     }
-    if self.fps != 0 {
-      try visitor.visitSingularInt64Field(value: self.fps, fieldNumber: 4)
+    if let v = self._fps {
+      try visitor.visitSingularInt64Field(value: v, fieldNumber: 4)
     }
-    if self.camPosition != .unspecified {
-      try visitor.visitSingularEnumField(value: self.camPosition, fieldNumber: 5)
+    if let v = self._camPosition {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 5)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: SendFrame, rhs: SendFrame) -> Bool {
-    if lhs.success != rhs.success {return false}
-    if lhs.error != rhs.error {return false}
-    if lhs.data != rhs.data {return false}
-    if lhs.fps != rhs.fps {return false}
-    if lhs.camPosition != rhs.camPosition {return false}
+    if lhs._success != rhs._success {return false}
+    if lhs._error != rhs._error {return false}
+    if lhs._data != rhs._data {return false}
+    if lhs._fps != rhs._fps {return false}
+    if lhs._camPosition != rhs._camPosition {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -981,26 +1194,26 @@ extension PeerBecameCamera: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      case 1: try decoder.decodeSingularBoolField(value: &self._success)
+      case 2: try decoder.decodeSingularStringField(value: &self._error)
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.success != false {
-      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    if let v = self._success {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 1)
     }
-    if !self.error.isEmpty {
-      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    if let v = self._error {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: PeerBecameCamera, rhs: PeerBecameCamera) -> Bool {
-    if lhs.success != rhs.success {return false}
-    if lhs.error != rhs.error {return false}
+    if lhs._success != rhs._success {return false}
+    if lhs._error != rhs._error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -1016,26 +1229,26 @@ extension PeerBecameMonitor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.success)
-      case 2: try decoder.decodeSingularStringField(value: &self.error)
+      case 1: try decoder.decodeSingularBoolField(value: &self._success)
+      case 2: try decoder.decodeSingularStringField(value: &self._error)
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.success != false {
-      try visitor.visitSingularBoolField(value: self.success, fieldNumber: 1)
+    if let v = self._success {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 1)
     }
-    if !self.error.isEmpty {
-      try visitor.visitSingularStringField(value: self.error, fieldNumber: 2)
+    if let v = self._error {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: PeerBecameMonitor, rhs: PeerBecameMonitor) -> Bool {
-    if lhs.success != rhs.success {return false}
-    if lhs.error != rhs.error {return false}
+    if lhs._success != rhs._success {return false}
+    if lhs._error != rhs._error {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
