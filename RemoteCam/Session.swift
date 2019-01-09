@@ -233,25 +233,12 @@ public class RemoteCamSession : ViewCtrlActor<RolePickerController>, MCSessionDe
     
     }
     
-    func map(value: RemoteShutterTypes.AVCaptureDevicePosition) -> AVCaptureDevicePosition {
-        switch(value) {
-        case .back:
-            return AVCaptureDevicePosition.back
-        case .front:
-            return AVCaptureDevicePosition.front
-        case .unspecified:
-            return AVCaptureDevicePosition.unspecified
-        case .UNRECOGNIZED(_):
-            return AVCaptureDevicePosition.unspecified
-        }
-    }
-    
     public func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         do {
             let remoteCmd = try RemoteCommandBuilder.shared.deserialize(serializedData: data)
             switch (remoteCmd) {
                 case let frame as SendFrame:
-                    this ! RemoteCmd.OnFrame(data: frame.data, sender: nil, peerId: peerID, fps: NSInteger(frame.fps), camPosition: self.map(value:frame.camPosition))
+                    this ! RemoteCmd.OnFrame(data: frame.data, sender: nil, peerId: peerID, fps: NSInteger(frame.fps), camPosition: map(value:frame.camPosition))
                 default:
                     this ! RemoteCmd.OnRemoteCommand.init(cmd: remoteCmd, sender: this)
             }

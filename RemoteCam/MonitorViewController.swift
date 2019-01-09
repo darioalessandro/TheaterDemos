@@ -12,8 +12,8 @@ import AVFoundation
 import BFGallery
 
 /**
-Monitor actor has a reference to the session actor and to the monitorViewController, it acts as the connection between the model and the controller from an MVC perspective.
-*/
+ Monitor actor has a reference to the session actor and to the monitorViewController, it acts as the connection between the model and the controller from an MVC perspective.
+ */
 
 public class MonitorActor : ViewCtrlActor<MonitorViewController> {
     
@@ -33,9 +33,6 @@ public class MonitorActor : ViewCtrlActor<MonitorViewController> {
             case let cam as UICmd.ToggleCameraResp:
                 self.setFlashMode(ctrl: ctrl, flashMode:  cam.flashMode)
                 
-            case let flash as RemoteCmd.ToggleFlashResp:
-                self.setFlashMode(ctrl: ctrl, flashMode:  flash.flashMode)
-                
             case is UICmd.UnbecomeMonitor:
                 let session : Optional<ActorRef> = RemoteCamSystem.shared.selectActor(actorPath: "RemoteCam/user/RemoteCam Session")
                 session! ! msg
@@ -48,9 +45,9 @@ public class MonitorActor : ViewCtrlActor<MonitorViewController> {
                         let multiplier = (f.camPosition == .back) ? Double(-1) : Double(1)
                         t = CGAffineTransform(rotationAngle: CGFloat(multiplier * Double.pi))
                     case .up:
-                            t = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
-                        default:
-                            print("none")
+                        t = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
+                    default:
+                        print("none")
                     }
                     if let transform = t {
                         ^{ctrl.imageView.transform = transform}
@@ -58,6 +55,14 @@ public class MonitorActor : ViewCtrlActor<MonitorViewController> {
                     ^{ctrl.imageView.image = img}
                 }
                 
+            case let cmd as RemoteCmd.OnRemoteCommand:
+                switch (cmd.cmd) {
+                case let flash as ToggleFlashResp:
+                    self.setFlashMode(ctrl: ctrl, flashMode:  map(value:flash.flashMode))
+                    
+                default:
+                    print("error")
+                }
             default:
                 self.receive(msg: msg)
             }
@@ -82,8 +87,8 @@ public class MonitorActor : ViewCtrlActor<MonitorViewController> {
 }
 
 /**
-UI for the monitor.
-*/
+ UI for the monitor.
+ */
 
 public class MonitorViewController : iAdViewController {
     
@@ -138,7 +143,7 @@ public class MonitorViewController : iAdViewController {
     
     /**
      Take picture contains the logic to kick off the Timer for the picture.
-    */
+     */
     
     @IBAction func onTakePicture(sender: UIBarButtonItem) {
         
@@ -147,8 +152,8 @@ public class MonitorViewController : iAdViewController {
         }
         
         let alert = UIAlertController(title: timerAlertTitle(seconds: Int(round(self.timerSlider.value))),
-            message: nil,
-            preferredStyle: .alert)
+                                      message: nil,
+                                      preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { (a) in
             alert.dismiss(animated: true, completion: nil)
@@ -161,19 +166,19 @@ public class MonitorViewController : iAdViewController {
             self.timer.start(withDuration: Int(round(self.timerSlider.value)), withTickHandler: {[unowned self](t) in
                 ^^{ alert.title = timerAlertTitle(seconds: t!.timeRemaining())}
                 switch(t!.timeRemaining()) {
-                    case let l where l > 3:
-                        self.soundManager.playBeepSound(CPSoundManagerAudioTypeSlow)
-                    case 3:
-                        self.soundManager.playBeepSound(CPSoundManagerAudioTypeFast)
-                    default:
-                        break
+                case let l where l > 3:
+                    self.soundManager.playBeepSound(CPSoundManagerAudioTypeSlow)
+                case 3:
+                    self.soundManager.playBeepSound(CPSoundManagerAudioTypeFast)
+                default:
+                    break
                 }
                 }, cancelHandler: {(t) in
                     ^^{alert.dismiss(animated: true, completion: nil)}
-                }, andCompletionHandler: {[unowned self] (t) in
-                    ^^{alert.dismiss(animated: true, completion: nil)}
-                    self.session ! UICmd.TakePicture(sender: nil)
-                })
+            }, andCompletionHandler: {[unowned self] (t) in
+                ^^{alert.dismiss(animated: true, completion: nil)}
+                self.session ! UICmd.TakePicture(sender: nil)
+            })
         }
     }
     

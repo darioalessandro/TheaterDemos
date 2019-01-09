@@ -46,7 +46,7 @@ public class CameraViewController : UIViewController, AVCaptureVideoDataOutputSa
     Default fps, it would be neat if we would adjust this based on network conditions.
     */
     
-    let fps = 3
+    let fps = 5
     
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -232,13 +232,17 @@ public class CameraViewController : UIViewController, AVCaptureVideoDataOutputSa
     
     public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
         if let cgBackedImage = UIImage(from: sampleBuffer, orientation: OrientationUtils.transformOrientationToImage(o: UIApplication.shared.statusBarOrientation)) {
-            let imageData = UIImageJPEGRepresentation(cgBackedImage, 0.1)!
+            let imageData = UIImageJPEGRepresentation(cgBackedImage, 0.5)!
         
             if let captureSession = self.captureSession,
                 let genericDevice = captureSession.inputs.first as? AVCaptureDeviceInput,
                 let device = genericDevice.device {
-                    let msg = RemoteCmd.SendFrame(data: imageData, sender: nil, fps:3, camPosition: device.position)
-                    self.session ! msg
+                let msg = RemoteCmd.OnRemoteCommand(cmd: SendFrame.with {
+                    $0.data = imageData
+                    $0.fps = 3
+                    $0.camPosition = map(value: device.position)
+                }, sender: nil)
+                self.session ! msg
             }
         }
     }

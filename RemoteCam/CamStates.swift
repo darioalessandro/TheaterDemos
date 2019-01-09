@@ -9,6 +9,7 @@
 import Foundation
 import Theater
 import MultipeerConnectivity
+import SwiftProtobuf
 
 extension RemoteCamSession {
     
@@ -28,15 +29,17 @@ extension RemoteCamSession {
                     
                     if let imageData = t.pic,
                         let image = UIImage(data: imageData) {
-                        //#selector(Bank.onClickBtoA(_:)
                         UIImageWriteToSavedPhotosAlbum(image, self, Selector("image:didFinishSavingWithError:contextInfo:"), nil)
                     }
                     
                     ^{alert.dismiss(animated: true, completion: nil)}
                     
-                    self.sendMessage(peer: [peer], msg: RemoteCmd.TakePicAck(sender: self.this))
+                    self.sendMessage(peer: [peer], msg: TakePicAck())
                     
-                    let result = self.sendMessage(peer: [peer], msg: RemoteCmd.TakePicResp(sender: self.this, pic:t.pic, error: t.error))
+                    let result = self.sendMessage(peer: [peer], msg: TakePicResp.with {
+                        $0.pic = t.pic ?? SwiftProtobuf.Internal.emptyData
+                        $0.error = t.error.debugDescription
+                    })
                     
                     if let failure = result as? Failure {
                         ^{
@@ -80,35 +83,48 @@ extension RemoteCamSession {
             return {[unowned self] (msg : Actor.Message) in
                 switch(msg) {
                 case let m as UICmd.ToggleCameraResp:
-                    self.sendMessage(peer: [peer], msg: RemoteCmd.ToggleCameraResp(flashMode: m.flashMode, camPosition: m.camPosition, error: nil))
+                    self.sendMessage(peer: [peer], msg: ToggleCameraResp.with {
+                        $0.flashMode = map(value: m.flashMode ?? AVCaptureFlashMode.off)
+                        $0.camPosition = map(value: m.camPosition ?? AVCaptureDevicePosition.unspecified)
+                    })
                     
-                case let s as RemoteCmd.SendFrame:
+                case let cmd as RemoteCmd.OnRemoteCommand:
+                switch (cmd.cmd) {
+                case let s as SendFrame:
                     self.sendMessage(peer: [peer], msg: s, mode: .unreliable)
                     
-                case is RemoteCmd.TakePic:
+                case is TakePic:
                     ^{ctrl.takePicture()}
                     self.become(name: self.states.cameraTakingPic,
                                 state:self.cameraTakingPic(peer: peer, ctrl: ctrl, lobby : lobby))
                     
-                case is RemoteCmd.ToggleCamera:
+                case is ToggleCamera:
                     let result = ctrl.toggleCamera()
-                    var resp : Message?
                     if let (flashMode, camPosition) = result.toOptional() {
-                        resp = RemoteCmd.ToggleCameraResp(flashMode: flashMode, camPosition: camPosition, error: nil)
+                        self.sendMessage(peer: [peer], msg: ToggleCameraResp.with {
+                            $0.camPosition = map(value:camPosition)
+                            $0.flashMode = map(value:flashMode ?? AVCaptureFlashMode.off)
+                        })
                     } else if let failure = result as? Failure {
-                        resp = RemoteCmd.ToggleCameraResp(flashMode: nil, camPosition: nil, error: failure.error)
+                        self.sendMessage(peer: [peer], msg: ToggleCameraResp.with {
+                            $0.error = failure.error.debugDescription
+                        })
                     }
-                    self.sendMessage(peer: [peer], msg: resp!)
                     
-                case is RemoteCmd.ToggleFlash:
+                case is ToggleFlash:
                     let result = ctrl.toggleFlash()
-                    var resp : Message?
                     if let flashMode = result.toOptional() {
-                        resp = RemoteCmd.ToggleFlashResp(flashMode: flashMode, error: nil)
+                        self.sendMessage(peer: [peer], msg: ToggleFlashResp.with {
+                            $0.flashMode = map(value:flashMode)
+                        })
                     } else if let failure = result as? Failure {
-                        resp = RemoteCmd.ToggleFlashResp(flashMode: nil, error: failure.error)
+                        self.sendMessage(peer: [peer], msg:ToggleFlashResp.with {
+                            $0.error = failure.error.debugDescription
+                        })
                     }
-                    self.sendMessage(peer: [peer], msg: resp!)
+                default:
+                    print("error")
+                    }
                     
                 case is UICmd.UnbecomeCamera:
                     self.popToState(name: self.states.connected)

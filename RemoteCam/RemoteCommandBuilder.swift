@@ -7,9 +7,54 @@
 //
 
 import Foundation
+import AVFoundation
 
 enum RemoteCommandBuilderError: Error {
     case unknownCommand
+}
+
+func map(value: RemoteShutterTypes.AVCaptureDevicePosition) -> AVCaptureDevicePosition {
+    switch(value) {
+    case .back:
+        return AVCaptureDevicePosition.back
+    case .front:
+        return AVCaptureDevicePosition.front
+    default:
+        return AVCaptureDevicePosition.unspecified
+    }
+}
+
+func map(value: AVCaptureDevicePosition) -> RemoteShutterTypes.AVCaptureDevicePosition {
+    switch(value) {
+    case .back:
+        return RemoteShutterTypes.AVCaptureDevicePosition.back
+    case .front:
+        return RemoteShutterTypes.AVCaptureDevicePosition.front
+    default:
+        return RemoteShutterTypes.AVCaptureDevicePosition.unspecified
+    }
+}
+
+func map(value: AVCaptureFlashMode) -> RemoteShutterTypes.AVCaptureFlashMode {
+    switch(value) {
+    case .auto:
+        return RemoteShutterTypes.AVCaptureFlashMode.auto
+    case .on:
+        return RemoteShutterTypes.AVCaptureFlashMode.on
+    default:
+        return RemoteShutterTypes.AVCaptureFlashMode.off
+    }
+}
+
+func map(value: RemoteShutterTypes.AVCaptureFlashMode) -> AVCaptureFlashMode {
+    switch(value) {
+    case .auto:
+        return AVCaptureFlashMode.auto
+    case .on:
+        return AVCaptureFlashMode.on
+    default:
+        return AVCaptureFlashMode.off
+    }
 }
 
 class RemoteCommandBuilder {
