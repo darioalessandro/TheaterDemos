@@ -22,7 +22,7 @@ public class GalleryViewController : BFGalleryViewController {
     
     override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if self.isBeingDismissed || self.isMovingFromParentViewController {
+        if self.isBeingDismissed || self.isMovingFromParent {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
         }
     }

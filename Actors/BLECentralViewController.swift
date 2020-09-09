@@ -47,7 +47,7 @@ class ObservationsViewController : UITableViewController {
     }
     
     internal override func viewWillDisappear(_ animated: Bool) {
-        if(self.isBeingDismissed || self.isMovingFromParentViewController){
+        if(self.isBeingDismissed || self.isMovingFromParent){
             reactive! ! RemoveObservationController()
         }
     }
@@ -73,7 +73,7 @@ class DeviceViewController : UITableViewController {
     }
     
     internal override func viewWillDisappear(_ animated: Bool) {
-        if(self.isBeingDismissed || self.isMovingFromParentViewController){
+        if(self.isBeingDismissed || self.isMovingFromParent){
             reactive! ! RemoveDeviceViewController(ctrl : self)
         }
     }

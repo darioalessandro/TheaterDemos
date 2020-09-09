@@ -87,7 +87,7 @@ class GreetingActorController : UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        if self.isBeingDismissed || self.isMovingFromParentViewController {
+        if self.isBeingDismissed || self.isMovingFromParent {
             system.stop()
             self.navigationController?.isToolbarHidden = true
         }

@@ -85,7 +85,7 @@ public class UICmd {
         }
     }
     
-    public class ToggleFlash : Actor.Message, NSCoding {
+    @objc(_TtCC10ActorsDemo5UICmd11ToggleFlash)public class ToggleFlash : Actor.Message, NSCoding {
         public func encode(with aCoder: NSCoder) {
         }
         
@@ -98,12 +98,12 @@ public class UICmd {
         }
     }
     
-    public class ToggleFlashResp : Actor.Message, NSCoding {
+    @objc(_TtCC10ActorsDemo5UICmd15ToggleFlashResp)public class ToggleFlashResp : Actor.Message, NSCoding {
         
         public let error : Error?
-        public let flashMode : AVCaptureFlashMode?
+        public let flashMode : AVCaptureDevice.FlashMode?
         
-        public init(flashMode : AVCaptureFlashMode?, error : Error?) {
+        public init(flashMode : AVCaptureDevice.FlashMode?, error : Error?) {
             self.flashMode = flashMode
             self.error = error
             super.init(sender : nil)
@@ -120,13 +120,13 @@ public class UICmd {
         }
         
         public required init?(coder aDecoder: NSCoder) {
-            self.flashMode = AVCaptureFlashMode(rawValue: aDecoder.decodeInteger(forKey: "flashMode"))!
+            self.flashMode = AVCaptureDevice.FlashMode(rawValue: aDecoder.decodeInteger(forKey: "flashMode"))!
             self.error = aDecoder.decodeObject(forKey: "error") as? Error
             super.init(sender: nil)
         }
     }
     
-    public class ToggleCamera : Actor.Message, NSCoding {
+    @objc(_TtCC10ActorsDemo5UICmd12ToggleCamera)public class ToggleCamera : Actor.Message, NSCoding {
         
         public init() {
             super.init(sender : nil)
@@ -140,14 +140,14 @@ public class UICmd {
         
     }
     
-    public class ToggleCameraResp : Actor.Message, NSCoding {
+    @objc(_TtCC10ActorsDemo5UICmd16ToggleCameraResp)public class ToggleCameraResp : Actor.Message, NSCoding {
         
         public let error : Error?
-        public let flashMode : AVCaptureFlashMode?
-        public let camPosition : AVCaptureDevicePosition?
+        public let flashMode : AVCaptureDevice.FlashMode?
+        public let camPosition : AVCaptureDevice.Position?
         
-        public init(flashMode : AVCaptureFlashMode?,
-            camPosition : AVCaptureDevicePosition?,
+        public init(flashMode : AVCaptureDevice.FlashMode?,
+            camPosition : AVCaptureDevice.Position?,
             error : Error?) {
                 self.flashMode = flashMode
                 self.camPosition = camPosition
@@ -170,8 +170,8 @@ public class UICmd {
         }
         
         public required init?(coder aDecoder: NSCoder) {
-            self.flashMode = AVCaptureFlashMode(rawValue: aDecoder.decodeInteger(forKey: "flashMode"))
-            self.camPosition = AVCaptureDevicePosition(rawValue: aDecoder.decodeInteger(forKey: "camPosition"))
+            self.flashMode = AVCaptureDevice.FlashMode(rawValue: aDecoder.decodeInteger(forKey: "flashMode"))
+            self.camPosition = AVCaptureDevice.Position(rawValue: aDecoder.decodeInteger(forKey: "camPosition"))
             self.error = aDecoder.decodeObject(forKey: "error") as? Error
             
             super.init(sender: nil)
@@ -199,7 +199,7 @@ public class OnConnectToDevice : Actor.Message {
 
 public class RemoteCmd : Actor.Message {
     
-    public class TakePic : RemoteCmd, NSCoding {
+    @objc(_TtCC10ActorsDemo9RemoteCmd7TakePic)public class TakePic : RemoteCmd, NSCoding {
         public func encode(with aCoder: NSCoder) {}
         
         public override init(sender: Optional<ActorRef>) {
@@ -212,7 +212,7 @@ public class RemoteCmd : Actor.Message {
         
     }
     
-    public class TakePicAck : Actor.Message, NSCoding {
+    @objc(_TtCC10ActorsDemo9RemoteCmd10TakePicAck)public class TakePicAck : Actor.Message, NSCoding {
         public override init(sender: Optional<ActorRef>) {
             super.init(sender: sender)
         }
@@ -224,7 +224,7 @@ public class RemoteCmd : Actor.Message {
         }
     }
     
-    public class TakePicResp : Actor.Message , NSCoding {
+    @objc(_TtCC10ActorsDemo9RemoteCmd11TakePicResp)public class TakePicResp : Actor.Message , NSCoding {
         
         let pic : Optional<Data>
         let error : Optional<Error>
@@ -272,12 +272,12 @@ public class RemoteCmd : Actor.Message {
         }
     }
     
-    public class SendFrame : Actor.Message, NSCoding {
+    @objc(_TtCC10ActorsDemo9RemoteCmd9SendFrame)public class SendFrame : Actor.Message, NSCoding {
         public let data : Data
         public let fps : NSInteger
-        public let camPosition : AVCaptureDevicePosition
+        public let camPosition : AVCaptureDevice.Position
         
-        init(data : Data, sender : Optional<ActorRef>, fps : NSInteger, camPosition : AVCaptureDevicePosition) {
+        init(data : Data, sender : Optional<ActorRef>, fps : NSInteger, camPosition : AVCaptureDevice.Position) {
             self.data = data
             self.fps = fps
             self.camPosition = camPosition
@@ -293,7 +293,7 @@ public class RemoteCmd : Actor.Message {
         public required init?(coder aDecoder: NSCoder) {
             self.data = aDecoder.decodeData()!
             self.fps = aDecoder.decodeInteger(forKey: "fps")
-            self.camPosition = AVCaptureDevicePosition(rawValue: aDecoder.decodeInteger(forKey: "camPosition"))!
+            self.camPosition = AVCaptureDevice.Position(rawValue: aDecoder.decodeInteger(forKey: "camPosition"))!
             super.init(sender: nil)
         }
     }
@@ -302,9 +302,9 @@ public class RemoteCmd : Actor.Message {
         public let data : Data
         public let peerId : MCPeerID
         public let fps : NSInteger
-        public let camPosition : AVCaptureDevicePosition
+        public let camPosition : AVCaptureDevice.Position
         
-        init(data : Data, sender : Optional<ActorRef>, peerId : MCPeerID, fps:NSInteger, camPosition : AVCaptureDevicePosition) {
+        init(data : Data, sender : Optional<ActorRef>, peerId : MCPeerID, fps:NSInteger, camPosition : AVCaptureDevice.Position) {
             self.camPosition = camPosition
             self.data = data
             self.peerId = peerId
@@ -313,7 +313,7 @@ public class RemoteCmd : Actor.Message {
         }
     }
     
-    public class PeerBecameCamera : Actor.Message , NSCoding {
+    @objc(_TtCC10ActorsDemo9RemoteCmd16PeerBecameCamera)public class PeerBecameCamera : Actor.Message , NSCoding {
         
         public init() {
             super.init(sender : nil)
@@ -326,7 +326,7 @@ public class RemoteCmd : Actor.Message {
         }
     }
     
-    public class PeerBecameMonitor : Actor.Message , NSCoding {
+    @objc(_TtCC10ActorsDemo9RemoteCmd17PeerBecameMonitor)public class PeerBecameMonitor : Actor.Message , NSCoding {
         
         public init() {
             super.init(sender : nil)
@@ -339,7 +339,7 @@ public class RemoteCmd : Actor.Message {
         }
     }
     
-    public class ToggleFlash : Actor.Message, NSCoding {
+    @objc(_TtCC10ActorsDemo9RemoteCmd11ToggleFlash)public class ToggleFlash : Actor.Message, NSCoding {
         public init() {
             super.init(sender : nil)
         }
@@ -351,12 +351,12 @@ public class RemoteCmd : Actor.Message {
         }
     }
     
-    public class ToggleFlashResp : Actor.Message, NSCoding {
+    @objc(_TtCC10ActorsDemo9RemoteCmd15ToggleFlashResp)public class ToggleFlashResp : Actor.Message, NSCoding {
         
         public let error : Error?
-        public let flashMode : AVCaptureFlashMode?
+        public let flashMode : AVCaptureDevice.FlashMode?
         
-        public init(flashMode : AVCaptureFlashMode?, error : Error?) {
+        public init(flashMode : AVCaptureDevice.FlashMode?, error : Error?) {
             self.flashMode = flashMode
             self.error = error
             super.init(sender : nil)
@@ -377,13 +377,13 @@ public class RemoteCmd : Actor.Message {
             if let _ = self.error {
                 self.flashMode = nil
             } else {
-                self.flashMode = AVCaptureFlashMode(rawValue: aDecoder.decodeInteger(forKey: "flashMode"))!
+                self.flashMode = AVCaptureDevice.FlashMode(rawValue: aDecoder.decodeInteger(forKey: "flashMode"))!
             }
             super.init(sender: nil)
         }
     }
     
-    public class ToggleCamera : Actor.Message, NSCoding {
+    @objc(_TtCC10ActorsDemo9RemoteCmd12ToggleCamera)public class ToggleCamera : Actor.Message, NSCoding {
         public init() {
             super.init(sender : nil)
         }
@@ -396,14 +396,14 @@ public class RemoteCmd : Actor.Message {
         
     }
     
-    public class ToggleCameraResp : Actor.Message, NSCoding {
+    @objc(_TtCC10ActorsDemo9RemoteCmd16ToggleCameraResp)public class ToggleCameraResp : Actor.Message, NSCoding {
         
         public let error : Error?
-        public let flashMode : AVCaptureFlashMode?
-        public let camPosition : AVCaptureDevicePosition?
+        public let flashMode : AVCaptureDevice.FlashMode?
+        public let camPosition : AVCaptureDevice.Position?
         
-        public init(flashMode : AVCaptureFlashMode?,
-            camPosition : AVCaptureDevicePosition?,
+        public init(flashMode : AVCaptureDevice.FlashMode?,
+            camPosition : AVCaptureDevice.Position?,
             error : Error?) {
             self.flashMode = flashMode
             self.camPosition = camPosition
@@ -432,8 +432,8 @@ public class RemoteCmd : Actor.Message {
                 self.flashMode = nil
                 self.camPosition = nil
             } else {
-                self.flashMode = AVCaptureFlashMode(rawValue: aDecoder.decodeInteger(forKey: "flashMode"))
-                self.camPosition = AVCaptureDevicePosition(rawValue: aDecoder.decodeInteger(forKey: "camPosition"))
+                self.flashMode = AVCaptureDevice.FlashMode(rawValue: aDecoder.decodeInteger(forKey: "flashMode"))
+                self.camPosition = AVCaptureDevice.Position(rawValue: aDecoder.decodeInteger(forKey: "camPosition"))
 
             }
             

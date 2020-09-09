@@ -45,7 +45,7 @@ public class OrientationUtils {
         }
     }
     
-    class public func transformToUIImage(o : AVCaptureVideoOrientation) ->  UIImageOrientation {
+    class public func transformToUIImage(o : AVCaptureVideoOrientation) ->  UIImage.Orientation {
         switch(o) {
             
         case .landscapeLeft:
@@ -62,7 +62,7 @@ public class OrientationUtils {
         }
     }
     
-    class public func transformOrientationToImage(o : UIInterfaceOrientation) -> UIImageOrientation {
+    class public func transformOrientationToImage(o : UIInterfaceOrientation) -> UIImage.Orientation {
         switch(o) {
             
         case .landscapeLeft:

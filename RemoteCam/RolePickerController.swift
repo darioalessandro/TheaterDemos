@@ -59,7 +59,7 @@ public class RolePickerController : UIViewController {
     
     override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if(self.isBeingDismissed || self.isMovingFromParentViewController){
+        if(self.isBeingDismissed || self.isMovingFromParent){
             remoteCamSession ! Disconnect(sender:nil)
             remoteCamSession ! Actor.Harakiri(sender: nil)
         }

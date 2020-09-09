@@ -115,7 +115,7 @@ class SyncTurnstileViewController : UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        if self.isBeingDismissed || self.isMovingFromParentViewController {
+        if self.isBeingDismissed || self.isMovingFromParent {
             system.stop()
         }
     }

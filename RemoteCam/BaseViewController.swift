@@ -100,15 +100,15 @@ public class iAdViewController : UIViewController, ADBannerViewDelegate {
         self.layoutBanners()
     }
     
-    public func bannerView(_ banner: ADBannerView!, didFailToReceiveAdWithError error: Error?) {
+    public func bannerView(_ banner: ADBannerView, didFailToReceiveAdWithError error: Error) {
         self.shouldHideBanner()
     }
     
-    public func bannerViewActionShouldBegin(_ banner: ADBannerView!, willLeaveApplication willLeave: Bool) -> Bool {
+    public func bannerViewActionShouldBegin(_ banner: ADBannerView, willLeaveApplication willLeave: Bool) -> Bool {
         return true
     }
 
-    public func bannerViewActionDidFinish(_ banner: ADBannerView!) {
+    public func bannerViewActionDidFinish(_ banner: ADBannerView) {
         self.shouldHideBanner()
     }
     

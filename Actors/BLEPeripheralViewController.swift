@@ -28,7 +28,7 @@ public class PeripheralViewController : UITableViewController {
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
-        if(self.isBeingDismissed || self.isMovingFromParentViewController){
+        if(self.isBeingDismissed || self.isMovingFromParent){
             self.system.stop()
         }
     }

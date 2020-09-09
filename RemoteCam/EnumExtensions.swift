@@ -10,8 +10,8 @@ import Foundation
 import AVFoundation
 import Theater
 
-extension AVCaptureDevicePosition {
-    public func toggle() -> Try<AVCaptureDevicePosition> {
+extension AVCaptureDevice.Position {
+    public func toggle() -> Try<AVCaptureDevice.Position> {
         switch(self) {
         case .back:
             return Success(value: .front)
@@ -23,8 +23,8 @@ extension AVCaptureDevicePosition {
     }
 }
 
-extension AVCaptureFlashMode {
-    public func next() -> AVCaptureFlashMode {
+extension AVCaptureDevice.FlashMode {
+    public func next() -> AVCaptureDevice.FlashMode {
         switch(self) {
         case .off:
             return .on

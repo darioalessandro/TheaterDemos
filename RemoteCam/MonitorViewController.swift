@@ -64,7 +64,7 @@ public class MonitorActor : ViewCtrlActor<MonitorViewController> {
         }
     }
     
-    func setFlashMode(ctrl : MonitorViewController, flashMode : AVCaptureFlashMode?) {
+    func setFlashMode(ctrl : MonitorViewController, flashMode : AVCaptureDevice.FlashMode?) {
         if let f = flashMode {
             switch(f) {
             case .off:
@@ -190,7 +190,7 @@ public class MonitorViewController : iAdViewController {
     
     override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if self.isBeingDismissed || self.isMovingFromParentViewController {
+        if self.isBeingDismissed || self.isMovingFromParent {
             monitor ! UICmd.UnbecomeMonitor(sender: nil)
             monitor ! Actor.Harakiri(sender: nil)
         }

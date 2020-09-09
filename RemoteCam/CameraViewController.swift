@@ -61,7 +61,7 @@ public class CameraViewController : UIViewController, AVCaptureVideoDataOutputSa
     
     override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if self.isBeingDismissed || self.isMovingFromParentViewController {
+        if self.isBeingDismissed || self.isMovingFromParent {
             if let cs = captureSession {
                 cs.stopRunning()
             }
@@ -83,11 +83,11 @@ public class CameraViewController : UIViewController, AVCaptureVideoDataOutputSa
         }
         
         captureSession = AVCaptureSession()
-        captureSession!.sessionPreset = AVCaptureSessionPresetHigh
+        captureSession!.sessionPreset = AVCaptureSession.Preset(rawValue: convertFromAVCaptureSessionPreset(AVCaptureSession.Preset.high))
         
-        self.captureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        self.captureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession!)
         
-        captureVideoPreviewLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        captureVideoPreviewLayer!.videoGravity = AVLayerVideoGravity(rawValue: convertFromAVLayerVideoGravity(AVLayerVideoGravity.resizeAspectFill));
         captureVideoPreviewLayer!.frame = self.view.frame
         
         self.view.layer.insertSublayer(captureVideoPreviewLayer!, below: self.back.layer)
@@ -98,7 +98,7 @@ public class CameraViewController : UIViewController, AVCaptureVideoDataOutputSa
             captureSession!.addOutput(stillImageOutput)
         }
         
-        if let videoDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo),
+        if let videoDevice = AVCaptureDevice.default(for: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video))),
             let captureSession = captureSession {
                 do {
                     let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
@@ -107,7 +107,7 @@ public class CameraViewController : UIViewController, AVCaptureVideoDataOutputSa
                     let output = ActorOutput(delegate: self)
                     captureSession.addOutput(output)
                     
-                    output.videoSettings = [kCVPixelBufferPixelFormatTypeKey : Int(kCVPixelFormatType_32BGRA)]
+                    output.videoSettings = [kCVPixelBufferPixelFormatTypeKey : Int(kCVPixelFormatType_32BGRA)] as [String : Any]
                     output.alwaysDiscardsLateVideoFrames = true
                     
                     self.setFrameRate(framerate: self.fps,videoDevice:videoDevice)
@@ -122,47 +122,39 @@ public class CameraViewController : UIViewController, AVCaptureVideoDataOutputSa
         }
     }
     
-    func toggleCamera() -> Try<(AVCaptureFlashMode?,AVCaptureDevicePosition)> {
+    func toggleCamera() -> Try<(AVCaptureDevice.FlashMode?,AVCaptureDevice.Position)> {
         do {
-            if  let captureSession = self.captureSession,
-                let genericDevice = captureSession.inputs.first as? AVCaptureDeviceInput,
-                let device = genericDevice.device,
-                let newPosition = device.position.toggle().toOptional(),
-                let newDevice = self.cameraForPosition(position: newPosition) {
-                    let newInput = try AVCaptureDeviceInput(device: newDevice)
-                    captureSession.removeInput(genericDevice)
-                    captureSession.addInput(newInput)
-                if let res = self.setFrameRate(framerate: self.fps,videoDevice:newDevice) as? Failure {
-                    return Failure(error : res.error!) //casting... swift sucks
-                    } else {
-                    self.rotateCameraToOrientation(orientation: UIApplication.shared.statusBarOrientation)
-                        let newFlashMode : AVCaptureFlashMode? = (newInput.device.hasFlash) ? newInput.device.flashMode : nil
-                        return Success(value: (newFlashMode, newInput.device.position))
-                    }
-            } else {
-                return Failure(error: NSError(domain: "Unable to find camera", code: 0, userInfo: nil))
-            }
+            let captureSession = self.captureSession
+            let genericDevice = captureSession?.inputs.first as? AVCaptureDeviceInput
+            let device = genericDevice?.device
+            let newPosition = device?.position.toggle().toOptional()
+            let newDevice = cameraForPosition(position: newPosition!)
+            let newInput = try AVCaptureDeviceInput(device: newDevice!)
+            captureSession?.removeInput(genericDevice!)
+            captureSession?.addInput(newInput)
+            setFrameRate(framerate: self.fps,videoDevice:newDevice!); do {
+                rotateCameraToOrientation(orientation: UIApplication.shared.statusBarOrientation)
+                    let newFlashMode : AVCaptureDevice.FlashMode? = (newInput.device.hasFlash) ? newInput.device.flashMode : nil
+                    return Success(value: (newFlashMode, newInput.device.position))
+                }
         } catch let error as NSError {
             return Failure(error: error)
         }
     }
     
-    func toggleFlash() -> Try<AVCaptureFlashMode> {
-        if let captureSession = self.captureSession,
-           let genericDevice = captureSession.inputs.first as? AVCaptureDeviceInput,
-           let device = genericDevice.device {
-            if device.hasFlash {
-                return self.setFlashMode(mode: device.flashMode.next(), device: device)
-            } else {
-                return Failure(error: NSError(domain: "Current camera does not support flash.", code: 0, userInfo: nil))
-            }
-            
-        }  else {
-            return Failure(error: NSError(domain: "Unable to find camera", code: 0, userInfo: nil))
+    func toggleFlash() -> Try<AVCaptureDevice.FlashMode> {
+        let captureSession = self.captureSession
+        let genericDevice = captureSession?.inputs.first as? AVCaptureDeviceInput
+        let device = genericDevice?.device
+        if (device?.hasFlash)! {
+            return self.setFlashMode(mode: (device?.flashMode.next())!, device: device!)
+        } else {
+            return Failure(error: NSError(domain: "Current camera does not support flash.", code: 0, userInfo: nil))
         }
+        return Failure(error: NSError(domain: "Unable to find camera", code: 0, userInfo: nil))
     }
     
-    func setFlashMode(mode : AVCaptureFlashMode, device : AVCaptureDevice) -> Try<AVCaptureFlashMode> {
+    func setFlashMode(mode : AVCaptureDevice.FlashMode, device : AVCaptureDevice) -> Try<AVCaptureDevice.FlashMode> {
         if device.hasFlash {
             do {
                 try device.lockForConfiguration()
@@ -177,8 +169,8 @@ public class CameraViewController : UIViewController, AVCaptureVideoDataOutputSa
         return Success(value: mode)
     }
     
-    func cameraForPosition(position : AVCaptureDevicePosition) -> AVCaptureDevice? {
-        if let videoDevices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as? [AVCaptureDevice] {
+    func cameraForPosition(position : AVCaptureDevice.Position) -> AVCaptureDevice? {
+        if let videoDevices = AVCaptureDevice.devices(for: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video))) as? [AVCaptureDevice] {
             let filtered : [AVCaptureDevice] = videoDevices.filter { return $0.position == position}
             return filtered.first
         } else {
@@ -189,26 +181,26 @@ public class CameraViewController : UIViewController, AVCaptureVideoDataOutputSa
     private func rotateCameraToOrientation( orientation : UIInterfaceOrientation) {
         let o = OrientationUtils.transform(o: orientation)
         if let preview = self.captureVideoPreviewLayer {
-            preview.connection.videoOrientation = o
-            if let videoConnection = stillImageOutput.connection(withMediaType: AVMediaTypeVideo) {
+            preview.connection?.videoOrientation = o
+            if let videoConnection = stillImageOutput.connection(with: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video))) {
                 videoConnection.videoOrientation = o
                 preview.frame = self.view.bounds
             }
         }        
         
         self.stillImageOutput.connections.forEach {
-            ($0 as! AVCaptureConnection).videoOrientation = o //stupid swift
+            ($0 ).videoOrientation = o //stupid swift
         }
     }
     
     func takePicture() -> Void {
-        if let videoConnection = stillImageOutput.connection(withMediaType: AVMediaTypeVideo) {
+        if let videoConnection = stillImageOutput.connection(with: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video))) {
             stillImageOutput.captureStillImageAsynchronously(from: videoConnection) {[unowned self]
                 (imageSampleBuffer, error) in
                 if imageSampleBuffer == nil {
                     self.session ! UICmd.OnPicture(sender: nil, error: NSError(domain: "Unable to take picture", code: 0, userInfo: nil))
                 } else {
-                    if let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageSampleBuffer) {
+                    if let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageSampleBuffer!) {
                         self.session ! UICmd.OnPicture(sender: nil, pic:imageData)
                     }
                 }
@@ -219,8 +211,8 @@ public class CameraViewController : UIViewController, AVCaptureVideoDataOutputSa
     func setFrameRate(framerate:Int, videoDevice: AVCaptureDevice) -> Try<Int> {
         do {
             try videoDevice.lockForConfiguration()
-            videoDevice.activeVideoMaxFrameDuration = CMTimeMake(1,Int32(framerate))
-            videoDevice.activeVideoMinFrameDuration = CMTimeMake(1,Int32(framerate))
+            videoDevice.activeVideoMaxFrameDuration = CMTimeMake(value: 1,timescale: Int32(framerate))
+            videoDevice.activeVideoMinFrameDuration = CMTimeMake(value: 1,timescale: Int32(framerate))
             videoDevice.unlockForConfiguration()
             return Success(value:framerate)
         } catch let error as NSError {
@@ -230,16 +222,29 @@ public class CameraViewController : UIViewController, AVCaptureVideoDataOutputSa
         }
     }
     
-    public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
+    public func captureOutput(_ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         if let cgBackedImage = UIImage(from: sampleBuffer, orientation: OrientationUtils.transformOrientationToImage(o: UIApplication.shared.statusBarOrientation)) {
-            let imageData = UIImageJPEGRepresentation(cgBackedImage, 0.1)!
+            let imageData = cgBackedImage.jpegData(compressionQuality: 0.1)!
         
-            if let captureSession = self.captureSession,
-                let genericDevice = captureSession.inputs.first as? AVCaptureDeviceInput,
-                let device = genericDevice.device {
-                    let msg = RemoteCmd.SendFrame(data: imageData, sender: nil, fps:3, camPosition: device.position)
-                    self.session ! msg
-            }
+            let captureSession = self.captureSession
+            let genericDevice = captureSession?.inputs.first as? AVCaptureDeviceInput
+            let device = genericDevice?.device
+            let msg = RemoteCmd.SendFrame(data: imageData, sender: nil, fps:3, camPosition: (device?.position)!)
         }
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVCaptureSessionPreset(_ input: AVCaptureSession.Preset) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVLayerVideoGravity(_ input: AVLayerVideoGravity) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVMediaType(_ input: AVMediaType) -> String {
+	return input.rawValue
 }

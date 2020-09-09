@@ -23,8 +23,8 @@ extension UIViewController {
     }
     
     public func verifyCameraAccess() {
-        if AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) != .authorized {
-            AVCaptureDevice.requestAccess( forMediaType: AVMediaTypeVideo) {
+        if AVCaptureDevice.authorizationStatus(for: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video))) != .authorized {
+            AVCaptureDevice.requestAccess( for: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video))) {
                 if !$0 {
                     ^{self.showNoAccessToCamera()}
                 }
@@ -62,4 +62,9 @@ extension UIViewController {
         addErrorView(view: blocker)
     }
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVMediaType(_ input: AVMediaType) -> String {
+	return input.rawValue
 }

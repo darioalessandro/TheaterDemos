@@ -114,8 +114,8 @@ class WSRViewController : ViewCtrlActor<WSViewController>, UITableViewDataSource
                     let i = self.receivedMessages.count - 1
                     ^{
                       let lastRow = IndexPath.init(row: i, section: 0)
-                        ctrl.tableView.insertRows(at: [lastRow], with: UITableViewRowAnimation.automatic)
-                        ctrl.tableView.scrollToRow(at: lastRow, at: UITableViewScrollPosition.middle, animated: true)}
+                        ctrl.tableView.insertRows(at: [lastRow], with: UITableView.RowAnimation.automatic)
+                        ctrl.tableView.scrollToRow(at: lastRow, at: UITableView.ScrollPosition.middle, animated: true)}
                     self.wsClient ! WebSocketClientWrapper.SendMessage(sender: self.this, message: w.message)
                 
                 case let w as WebSocketClientWrapper.OnMessage:
@@ -123,8 +123,8 @@ class WSRViewController : ViewCtrlActor<WSViewController>, UITableViewDataSource
                     let i = self.receivedMessages.count - 1
                     ^{
                       let lastRow = IndexPath.init(row: i, section: 0)
-                        ctrl.tableView.insertRows(at: [lastRow], with: UITableViewRowAnimation.automatic)
-                        ctrl.tableView.scrollToRow(at: lastRow, at: UITableViewScrollPosition.middle, animated: true)}
+                        ctrl.tableView.insertRows(at: [lastRow], with: UITableView.RowAnimation.automatic)
+                        ctrl.tableView.scrollToRow(at: lastRow, at: UITableView.ScrollPosition.middle, animated: true)}
                     
                 case let m as WebSocketClientWrapper.OnDisconnect:
                     self.popToState(name: self.states.disconnected)
@@ -173,7 +173,7 @@ class WSViewController : UIViewController, UITextFieldDelegate {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        if self.isBeingDismissed || self.isMovingFromParentViewController {
+        if self.isBeingDismissed || self.isMovingFromParent {
             system.stop()
         }
     }
@@ -183,8 +183,8 @@ class WSViewController : UIViewController, UITextFieldDelegate {
     }
     
     func addNotifications() {
-        NotificationCenter.default.addObserver(self, selector:#selector(WSViewController.keyboardWillAppear(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector:#selector(WSViewController.keyboardWillDisappear(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(WSViewController.keyboardWillAppear(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(WSViewController.keyboardWillDisappear(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -196,9 +196,9 @@ class WSViewController : UIViewController, UITextFieldDelegate {
         wsCtrl ! WebSocketClientWrapper.SendMessage(sender: nil, message: textField.text!)
     }
     
-    public func keyboardWillAppear(notification: NSNotification){
+    @objc public func keyboardWillAppear(notification: NSNotification){
         let userInfo:Dictionary = notification.userInfo!
-        let keyboardSize: CGSize = (userInfo[UIKeyboardFrameBeginUserInfoKey] as AnyObject).cgRectValue.size
+        let keyboardSize: CGSize = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as AnyObject).cgRectValue.size
         
         bottomTextField.constant = keyboardSize.height;
         self.view.setNeedsUpdateConstraints()
@@ -208,7 +208,7 @@ class WSViewController : UIViewController, UITextFieldDelegate {
         }
     }
     
-    func keyboardWillDisappear(notification: NSNotification){
+    @objc func keyboardWillDisappear(notification: NSNotification){
         bottomTextField.constant = 0;
         self.view.setNeedsUpdateConstraints()
         
